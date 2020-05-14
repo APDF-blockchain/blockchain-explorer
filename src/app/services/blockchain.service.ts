@@ -23,35 +23,4 @@ export class BlockchainService {
     this.myWebSocket$ = this.myWebSocket.asObservable();
   }
 
-  // private initConnection(ws) {
-  //   sockets.push(ws);
-  //   // blockChainObject.addSocket(ws);
-  //   // this.initMessageHandler(ws);
-  //   // initErrorHandler(ws);
-  //   // this.write(ws, queryChainLengthMsg());
-  // }
-
-  // private initMessageHandler(ws) {
-  //   ws.on('message', (data) => {
-  //       const message = JSON.parse(data);
-  //       console.log('Received message' + JSON.stringify(message));
-  //       switch (message.type) {
-  //           case MessageType.QUERY_LATEST:
-  //               this.write(ws, blockChainObject.responseLatestMsg());
-  //               break;
-  //           case MessageType.QUERY_ALL:
-  //               this.write(ws, responseChainMsg());
-  //               break;
-  //           case MessageType.RESPONSE_BLOCKCHAIN:
-  //               blockChainObject.handleBlockchainResponse(message);
-  //               break;
-  //       }
-  //   });
-  // }
-
-  // private write(ws, message) {
-  //   ws.send(JSON.stringify(message));
-  // }
-
-
 }

@@ -8,11 +8,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import { BlockchainComponent } from './components/blockchain/blockchain.component';
+import { WalletComponent } from './components/wallet/wallet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BlockchainComponent
+    BlockchainComponent,
+    WalletComponent
   ],
   imports: [
     BrowserModule,
