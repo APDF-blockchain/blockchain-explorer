@@ -1,0 +1,23 @@
+<div class="wrapper">
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let block of blocks">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+                Block n°: {{ block?.index }}
+            </mat-panel-title>
+            <mat-panel-description>
+                {{ block?.timestamp | date: 'medium' }}
+            </mat-panel-description>
+            <mat-panel-description>
+                {{ block?.hash }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <p>Nonce: {{ block?.nonce }}</p>
+          <p>Difficulty: {{ block?.difficulty }}</p>
+          <p>Previous hash: {{ block?.previousHash }}</p>
+          <p>Timestamp: {{ block?.timestamp }}</p>
+          <p>Data: {{ block?.data }}</p>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
