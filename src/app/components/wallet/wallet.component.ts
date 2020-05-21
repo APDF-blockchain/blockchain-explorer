@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WalletService } from 'src/app/services/wallet.service';
+import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
   selector: 'app-wallet',
@@ -9,6 +9,8 @@ import { WalletService } from 'src/app/services/wallet.service';
 export class WalletComponent {
   public name = 'Olivier';
 
-  constructor(private walletService: WalletService) { }
+  constructor(private transactionService: TransactionService) {
+
+  }
 
 }

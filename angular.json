@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "blockchain-explorer"
+  "defaultProject": "blockchain-explorer",
+  "cli": {
+    "analytics": false
+  }
 }
