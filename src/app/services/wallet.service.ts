@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ec } from 'elliptic';
-//const fs = require('fs');
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import * as _ from 'lodash';
 
 import { TransactionService } from './transaction.service';
@@ -22,39 +20,18 @@ export class WalletService {
     console.log('Hello');
   }
 
-  public getPrivateFromWallet(): string {
-    const buffer = readFileSync(this.privateKeyLocation, 'utf8');
-    return buffer.toString();
-  }
-
-  public getPublicFromWallet(): string  {
-    const privateKey = this.getPrivateFromWallet();
-    const key = this.EC.keyFromPrivate(privateKey, 'hex');
-    return key.getPublic().encode('hex', false); // TODO: determine if false is the correct second argument.
-  }
-
-  public generatePrivateKey(): string {
-    const keyPair = this.EC.genKeyPair();
-    const privateKey = keyPair.getPrivate();
-    return privateKey.toString(16);
-  }
-
-  public initWallet() {
-    // let's not override existing private keys
-    if (existsSync(this.privateKeyLocation)) {
-      return;
-    }
-    const newPrivateKey = this.generatePrivateKey();
-
-    writeFileSync(this.privateKeyLocation, newPrivateKey);
-    console.log('new wallet with private key created');
-  }
-
   public getBalance(address: string, unspentTxOuts: UnspentTxOut[]): number {
     return _(unspentTxOuts)
       .filter((uTxO: UnspentTxOut) => uTxO.address === address)
       .map((uTxO: UnspentTxOut) => uTxO.amount)
       .sum();
+      // let rVal: number = 0;
+      // for (let i = 0; i < unspentTxOuts.length; i++) {
+      //   if (unspentTxOuts[i].address === address) {
+      //     rVal += unspentTxOuts[i].amount;
+      //   }
+      // }
+      // return rVal;
   }
 
   public findTxOutsForAmount(amount: number, myUnspentTxOuts: UnspentTxOut[]) {
