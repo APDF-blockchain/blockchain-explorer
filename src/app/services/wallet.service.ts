@@ -7,6 +7,8 @@ import { UnspentTxOut } from '../model/unspent-tx-out';
 import { TxOut } from '../model/tx-out';
 import { Transaction } from '../model/transaction';
 import { TxIn } from '../model/tx-in';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,16 @@ export class WalletService {
 
   public EC = new ec('secp256k1');
   private privateKeyLocation = 'node/wallet/private_key';
+  private baseUrl = 'http://localhost:3002/';
 
-  constructor(private transactionService: TransactionService) {
+  constructor(private transactionService: TransactionService, private httpClient: HttpClient) {
     console.log('Hello');
+  }
+
+  public createWallet(password: string): Observable<any> {
+    const url = this.baseUrl + 'wallet/create';
+    const options = { params: new HttpParams().set('password', password) };
+    return this.httpClient.post(url, options);
   }
 
   public getBalance(address: string, unspentTxOuts: UnspentTxOut[]): number {
