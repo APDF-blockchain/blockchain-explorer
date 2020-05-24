@@ -5,13 +5,13 @@
     <div class="form-fields">
         <mat-form-field>
             <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="password" id="password" formControlName="password">
-            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
                 <span class="material-icons">{{ hidePassword ? 'visibility_off' : 'visibility' }}</span>
             </button>
         </mat-form-field>
         <mat-form-field>
             <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" placeholder="confirmPassword" id="confirmPassword" formControlName="confirmPassword">
-            <button type="button" mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <button type="button" mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide confirm password'" [attr.aria-pressed]="hideConfirmPassword">
                 <span class="material-icons">{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
             </button>
             <mat-error *ngIf="createWalletForm.get('confirmPassword').invalid">
