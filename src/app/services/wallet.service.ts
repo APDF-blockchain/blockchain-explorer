@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { ec } from 'elliptic';
 import * as _ from 'lodash';
 
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { ethers } from 'ethers';
+
 import { TransactionService } from './transaction.service';
 import { UnspentTxOut } from '../model/unspent-tx-out';
 import { TxOut } from '../model/tx-out';
@@ -19,6 +22,12 @@ export class WalletService {
   private privateKeyLocation = 'node/wallet/private_key';
   private baseUrl = 'http://localhost:3002/';
 
+  /**
+   * @description - the wallet directory
+   */
+  private walletDirectory = 'node/wallet/';
+
+
   constructor(private transactionService: TransactionService, private httpClient: HttpClient) {
     console.log('Hello');
   }
@@ -26,7 +35,23 @@ export class WalletService {
   public createWallet(password: string): Observable<any> {
     const url = this.baseUrl + 'wallet/create';
     const options = { params: new HttpParams().set('password', password) };
+
+    this.jsonFile(password);
+
     return this.httpClient.post(url, options);
+  }
+
+  private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
+    const randomEntropyBytes = ethers.utils.randomBytes(16);
+    const mnemonic = ethers.utils.HDNode.entropyToMnemonic(randomEntropyBytes);
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+    const filename = "UTC_JSON_WALLET_" + Math.round(+ new Date() / 1000) + "_" + +(Math.floor(Math.random() * 200001) - 10000) + ".json";
+
+    wallet.encrypt(password).then((jsonWallet) => {
+      writeFileSync(this.walletDirectory + filename, jsonWallet, 'utf-8');
+    });
+    let rVal = { 'mnemonic': mnemonic, 'filename': filename };
+    return rVal;
   }
 
   public getBalance(address: string, unspentTxOuts: UnspentTxOut[]): number {
