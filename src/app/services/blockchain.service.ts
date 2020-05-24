@@ -11,14 +11,14 @@ export class BlockchainService {
   public myWebSocket$: Observable<any>;
 
   constructor(private httpClient: HttpClient) {
-    this.initP2PServer();
+    this.initWS();
   }
 
   public getBlocks(): Observable<any> {
     return this.httpClient.get('http://localhost:3002/blocks');
   }
 
-  private initP2PServer() {
+  private initWS() {
     this.myWebSocket = webSocket('ws://localhost:6002');
     this.myWebSocket$ = this.myWebSocket.asObservable();
   }

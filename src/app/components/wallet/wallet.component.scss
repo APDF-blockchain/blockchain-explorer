@@ -1,0 +1,32 @@
+@import 'src/sass/variables';
+
+mat-tab-group {
+    width: fit-content;
+}
+
+#wallet-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - #{$navbarHeight} - #{$footerHeight});
+}
+
+mat-card {
+    height: 60vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px 25px;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-btns {
+    margin-top: 10px;
+}

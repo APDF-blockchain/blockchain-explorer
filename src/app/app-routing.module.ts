@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WalletComponent } from './components/wallet/wallet.component';
-import { BlockchainComponent } from './components/blockchain/blockchain.component';
-
 
 const routes: Routes = [
-  { path: '', component: BlockchainComponent },
-  { path: 'wallet', component: WalletComponent }
+  { path: '', loadChildren: () => import('./components/blockchain/blockchain.module').then(m => m.BlockchainModule) },
+  { path: 'wallet', redirectTo: 'wallet/transaction'},
+  { path: 'wallet', loadChildren: () => import('./components/wallet/wallet.module').then(m => m.WalletModule) },
+  { path: 'faucet', loadChildren: () => import('./components/faucet/faucet.module').then(m => m.FaucetModule) }
 ];
 
 @NgModule({

@@ -1,0 +1,26 @@
+<form 
+    [formGroup]="createWalletForm" 
+    (ngSubmit)="onCreateWallet()"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="form-fields">
+        <mat-form-field>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="password" id="password" formControlName="password">
+            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <span class="material-icons">{{ hidePassword ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" placeholder="confirmPassword" id="confirmPassword" formControlName="confirmPassword">
+            <button type="button" mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <span class="material-icons">{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+            <mat-error *ngIf="createWalletForm.get('confirmPassword').invalid">
+                Passwords <strong>do not match</strong>
+            </mat-error>  
+        </mat-form-field>
+    </div>
+
+    <div class="form-btns">
+        <button mat-raised-button color="primary" [disabled]="createWalletForm.invalid">Create</button>
+    </div>
+</form>

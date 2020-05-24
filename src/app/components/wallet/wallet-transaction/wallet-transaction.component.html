@@ -1,0 +1,25 @@
+<form 
+    [formGroup]="transactionForm" 
+    (ngSubmit)="onSubmitTransaction()"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="form-fields">
+        <mat-form-field>
+            <input matInput type="text" placeholder="Sender" id="sender" formControlName="sender">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" placeholder="Recipient" id="recipient" formControlName="recipient">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Value" id="value" formControlName="value">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput type="text" placeholder="Blockchain node" id="blockchainNode" formControlName="blockchainNode">
+        </mat-form-field>    
+    </div>
+
+    <div class="form-btns">
+        <button mat-raised-button color="primary" [disabled]="transactionForm.invalid">Send Transaction</button>
+    </div>
+
+</form>
