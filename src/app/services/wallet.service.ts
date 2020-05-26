@@ -20,7 +20,7 @@ export class WalletService {
 
   public EC = new ec('secp256k1');
   private privateKeyLocation = 'node/wallet/private_key';
-  private baseUrl = 'http://localhost:3002/';
+  private baseUrl = 'http://localhost:3001/';
 
   /**
    * @description - the wallet directory
@@ -38,8 +38,15 @@ export class WalletService {
 
     // this.jsonFile(password);
 
-    return this.httpClient.post(url, options);
+    return this.httpClient.post(url, {password}, options);
   }
+
+  public sendTransaction(transaction: any): Observable<any>  {
+    const url = this.baseUrl + '/transactions/send';
+    // const transaction
+    return this.httpClient.post(url, transaction);
+  }
+
 
   // private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
   //   const randomEntropyBytes = ethers.utils.randomBytes(16);

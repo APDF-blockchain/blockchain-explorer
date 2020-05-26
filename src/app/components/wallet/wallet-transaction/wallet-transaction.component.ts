@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class WalletTransactionComponent implements OnInit {
   public transactionForm: FormGroup;
+  // public message: string;
 
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 
@@ -18,7 +19,9 @@ export class WalletTransactionComponent implements OnInit {
 
   public onSubmitTransaction(): void {
     const transaction = this.transactionForm.value;
-    // this.walletService.createTransaction(transaction);
+    this.walletService.sendTransaction(transaction).subscribe(res => {
+      // this.message = res.message;
+    });
   }
 
   private initTransactionForm(): void {

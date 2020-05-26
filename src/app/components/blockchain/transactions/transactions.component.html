@@ -1,0 +1,42 @@
+<h2>Transactions</h2>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="transactionDataHash">
+        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th> -->
+        <td mat-cell *matCellDef="let tx"> {{ tx.transactionDataHash }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateCreated">
+    <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th> -->
+    <td mat-cell *matCellDef="let tx"> {{ tx.dateCreated }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="from">
+    <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th> -->
+        <td mat-cell *matCellDef="let tx">From: {{ tx.from }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="to">
+        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th> -->
+    <td mat-cell *matCellDef="let tx">To: {{ tx.to }} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="detailsBtn">
+      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header></th> -->
+      <td mat-cell *matCellDef="let tx">
+        <button mat-icon-button matTooltip="More info about this delviery" matTooltipPosition="right" (click)="openDialog(tx.transactionDataHash)">
+          <span class="material-icons">
+            loupe
+          </span>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr> -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; sticky: true"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
