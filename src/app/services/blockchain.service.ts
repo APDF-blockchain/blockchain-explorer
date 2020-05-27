@@ -15,11 +15,11 @@ export class BlockchainService {
   }
 
   public getBlocks(): Observable<any> {
-    return this.httpClient.get('http://localhost:3002/blocks');
+    return this.httpClient.get('http://localhost:3001/blocks');
   }
 
   private initWS() {
-    this.myWebSocket = webSocket('ws://localhost:6002');
+    this.myWebSocket = webSocket('ws://localhost:6001');
     this.myWebSocket$ = this.myWebSocket.asObservable();
   }
 

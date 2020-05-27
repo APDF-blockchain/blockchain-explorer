@@ -13,6 +13,8 @@ export class WalletCreationComponent implements OnInit {
   public hidePassword = true;
   public hideConfirmPassword = true;
 
+  public wallet: any;
+
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 
   public ngOnInit(): void {
@@ -22,7 +24,18 @@ export class WalletCreationComponent implements OnInit {
   public onCreateWallet(): void {
     if (this.createWalletForm.valid) {
       const password = this.createWalletForm.value.password;
-      this.walletService.createWallet(password).subscribe(res => console.log(res));
+      this.walletService.createWallet(password).subscribe(
+        (val) => {
+            console.log("POST call successful value returned in body",
+                        val);
+            this.wallet = val;
+        },
+        error => {
+            console.log("POST call in error", error);
+        },
+        () => {
+            console.log("The POST observable is now completed.");
+        }); //.subscribe((res: any) => console.log(res));
     }
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletService } from 'src/app/services/wallet.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UnspentTxOut } from 'src/app/model/unspent-tx-out';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-wallet-transaction',
@@ -17,8 +19,13 @@ export class WalletTransactionComponent implements OnInit {
   }
 
   public onSubmitTransaction(): void {
+    // let blockchain: Block[] = [genesisBlock];
+    // let unspentTxOuts: UnspentTxOut[] = processTransactions(blockchain[0].data, [], 0);
+    // const getUnspentTxOuts = (): UnspentTxOut[] => _.cloneDeep(unspentTxOuts);
     const transaction = this.transactionForm.value;
+    console.log(this.walletService.wallet);
     // this.walletService.createTransaction(transaction);
+    // TODO: After transaction, post to node
   }
 
   private initTransactionForm(): void {
