@@ -12,7 +12,7 @@ import { TransactionDetailsDialogComponent } from '../blocks/transaction-details
   styleUrls: ['./transactions.component.scss']
 })
 export class TransactionsComponent implements OnInit {
-  public displayedColumns: string[] = ['dateCreated', 'transactionDataHash', 'from', 'to', 'detailsBtn'];
+  public displayedColumns: string[] = ['hashDateCreated', 'fromTo', 'detailsBtn'];
   private confirmedTx: any[] = [];
   public areDataLoaded = false;
   public dataSource: MatTableDataSource<any>;

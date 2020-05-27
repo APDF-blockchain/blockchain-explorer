@@ -1,1 +1,5 @@
-<p>transaction-details-dialog works!</p>
+<ul>
+    <li *ngFor="let item of txDetails | keyvalue">
+        <b>{{item.key}}</b>: <b>{{item.value}}</b>
+    </li>
+</ul>

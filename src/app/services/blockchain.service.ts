@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
 
-const BASE_URL = 'http://localhost:3001';
+const IS_MOCK_MODE = true;
+const BASE_URL = IS_MOCK_MODE ? 'https://stormy-everglades-34766.herokuapp.com' : 'http://localhost:3001';
 const WS_ADDRESS = 'ws://localhost:6001';
 const ENDPOINTS = {
   GET_INFO: BASE_URL + '/info',
@@ -48,9 +49,8 @@ export class BlockchainService {
   }
 
   public getTx(tranHash: string): Observable<any> {
-    console.log(tranHash);
-    const options = { params: new HttpParams().set('tranHash', tranHash) };
-    return this.httpClient.get(ENDPOINTS.GET_TX, options).pipe(first());
+    const url = ENDPOINTS.GET_TX + '/' + tranHash;
+    return this.httpClient.get(url).pipe(first());
   }
 
   private initWS() {

@@ -1,15 +1,16 @@
-// .wrapper {
-//     padding: 10px;
-//     // margin: 10px;
-//     overflow-y: scroll;
-//     max-height: 60vh;
-// }
-
 @import 'src/sass/variables';
+
+.main-container {
+    padding: 20px;
+}
 
 #flex-container {
     display: flex;
     justify-content: space-between;
+}
+
+#info-card {
+    margin-bottom: 30px;
 }
 
 .flex-container-item {

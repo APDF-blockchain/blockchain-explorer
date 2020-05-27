@@ -20,7 +20,7 @@ export class BlocksComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private blockchainService: BlockchainService, public dialog: MatDialog) { 
+  constructor(private blockchainService: BlockchainService, public dialog: MatDialog) {
     this.listenToBlockchain();
   }
 
