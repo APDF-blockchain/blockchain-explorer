@@ -1,18 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { BlockchainService } from 'src/app/services/blockchain.service';
-import { TransactionDetailsDialogComponent } from '../blocks/transaction-details-dialog/transaction-details-dialog.component';
 
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.scss']
 })
-export class TransactionsComponent implements OnInit {
-  public displayedColumns: string[] = ['hashDateCreated', 'fromTo', 'detailsBtn'];
+export class TransactionsComponent {
+  public displayedColumns: string[] = ['hashDateCreated', 'from', 'to'];
   private confirmedTx: any[] = [];
   public areDataLoaded = false;
   public dataSource: MatTableDataSource<any>;
@@ -22,17 +21,6 @@ export class TransactionsComponent implements OnInit {
 
   constructor(private blockchainService: BlockchainService, public dialog: MatDialog) {
     this.loadConfirmedTx();
-  }
-
-  ngOnInit(): void {
-  }
-
-  public openDialog(txHash: string) {
-    this.blockchainService.getTx(txHash).subscribe(tx => {
-      this.dialog.open(TransactionDetailsDialogComponent, {
-        data: tx
-      });
-    });
   }
 
   private loadConfirmedTx(): void {

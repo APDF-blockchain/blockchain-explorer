@@ -2,31 +2,29 @@
   <table mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="hashDateCreated">
-      <th mat-header-cell *matHeaderCellDef> <h2>Transactions</h2> </th>
-      <td mat-cell *matCellDef="let tx"> <div class="limited-hash">{{ tx.transactionDataHash.substring(1, 12) }}...</div> 
+      <th mat-header-cell *matHeaderCellDef> <h2>Latest transactions</h2> </th>
+      <td mat-cell *matCellDef="let tx">
+        <a [routerLink]="['/', 'transactions', tx.transactionDataHash]">
+          {{ tx.transactionDataHash.substring(1, 12) }}...
+        </a>
         <br> {{ tx.dateCreated }} </td>
     </ng-container>
-    
-    <!-- <ng-container matColumnDef="transactionDataHash">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let tx"> {{ tx.transactionDataHash }} </td>
-    </ng-container> -->
 
-    <ng-container matColumnDef="fromTo">
+    <ng-container matColumnDef="from">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let tx">From: <div class="limited-hash">{{ tx.from.substring(1, 12) }}...</div> 
-        <br> To: <div class="limited-hash">{{ tx.to.substring(1, 12) }}...</div> </td>
-      <br>
+      <td mat-cell *matCellDef="let tx">From:
+        <a [routerLink]="['/', 'address', tx.from]">
+          {{ tx.from.substring(1, 12) }}...
+        </a>
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="detailsBtn">
+    <ng-container matColumnDef="to">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let tx">
-        <button mat-icon-button matTooltip="More info about this delviery" matTooltipPosition="right" (click)="openDialog(tx.transactionDataHash)">
-          <span class="material-icons">
-            loupe
-          </span>
-        </button>
+      <td mat-cell *matCellDef="let tx">To:
+        <a [routerLink]="['/', 'address', tx.to]">
+          {{ tx.to.substring(1, 12) }}...
+        </a>
       </td>
     </ng-container>
 

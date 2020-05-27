@@ -6,8 +6,9 @@ import { BlockchainRoutingModule } from './blockchain-routing.module';
 import { BlocksComponent } from './blocks/blocks.component';
 import { InfoComponent } from './info/info.component';
 import { TransactionsComponent } from './transactions/transactions.component';
-import { BlockDetailsDialogComponent } from './blocks/block-details-dialog/block-details-dialog.component';
-import { TransactionDetailsDialogComponent } from './blocks/transaction-details-dialog/transaction-details-dialog.component';
+import { BlockComponent } from './block/block.component';
+import { TransactionComponent } from './transaction/transaction.component';
+import { AddressComponent } from './address/address.component';
 
 
 @NgModule({
@@ -16,8 +17,9 @@ import { TransactionDetailsDialogComponent } from './blocks/transaction-details-
     BlocksComponent,
     InfoComponent,
     TransactionsComponent,
-    BlockDetailsDialogComponent,
-    TransactionDetailsDialogComponent
+    BlockComponent,
+    TransactionComponent,
+    AddressComponent
   ],
   imports: [
     CommonModule,

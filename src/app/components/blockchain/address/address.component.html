@@ -1,0 +1,15 @@
+<h2>{{ address }}</h2>
+<ul *ngIf="balance$ | async; let balance;">
+    <b>Balance:</b>
+    <li>Safe balance: {{ balance.safeBalance}}</li>
+    <li>Confirmed balance: {{ balance.confirmedBalance}}</li>
+    <li>Pending balance: {{ balance.pendingBalance}}</li>
+</ul>
+<ul>
+    <b>Transactions:</b>
+    <li *ngFor="let tx of txs$ | async">
+        <a [routerLink]="['/', 'transactions', tx.transactionDataHash]">
+            {{ tx.transactionDataHash }}
+        </a>
+    </li>
+</ul>

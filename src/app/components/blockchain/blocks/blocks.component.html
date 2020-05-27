@@ -2,8 +2,9 @@
   <table mat-table [dataSource]="dataSource">
 
     <ng-container matColumnDef="index">
-      <th mat-header-cell *matHeaderCellDef> <h2>Blocks</h2> </th>
-      <td mat-cell *matCellDef="let block">Block n° {{ block.index }} </td>
+      <th mat-header-cell *matHeaderCellDef> <h2>Latest blocks</h2> </th>
+      <!-- <th mat-header-cell *matHeaderCellDef> <h2>Latest blocks</h2> </th> -->
+      <td mat-cell *matCellDef="let block"><a [routerLink]="['blocks', block.index]">Block n° {{ block.index }} </a></td>
     </ng-container>
 
     <ng-container matColumnDef="dateCreated">
@@ -11,20 +12,8 @@
       <td mat-cell *matCellDef="let block"> {{ block.dateCreated | date:'medium'  }} </td>
     </ng-container>
 
-
-    <ng-container matColumnDef="detailsBtn">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header></th> -->
-      <td mat-cell *matCellDef="let block">
-        <button mat-icon-button matTooltip="More info about this delviery" matTooltipPosition="right" (click)="openDialog(block.blockHash)">
-          <span class="material-icons">
-            loupe
-          </span>
-        </button>
-      </td>
-    </ng-container>
-
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" span="2"></tr>
+    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr> -->
     <tr mat-row *matRowDef="let row; columns: displayedColumns; sticky: true"></tr>
   </table>
 

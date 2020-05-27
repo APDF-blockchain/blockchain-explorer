@@ -14,6 +14,7 @@ const ENDPOINTS = {
   GET_CONFIRMED_TX: BASE_URL + '/transactions/confirmed',
   GET_PENDING_TX: BASE_URL + '/transactions/pending',
   GET_TX: BASE_URL + '/transactions',
+  GET_ADD: BASE_URL +  '/address'
 };
 
 @Injectable({
@@ -32,8 +33,10 @@ export class BlockchainService {
   }
 
   public getBlock(index: number): Observable<any> {
-    const options = { params: new HttpParams().set('index', index.toString()) };
-    return this.httpClient.get(ENDPOINTS.GET_BLOCK, options).pipe(first());
+    console.log(index);
+    // const options = { params: new HttpParams().set('index', index.toString()) };
+    const url = ENDPOINTS.GET_BLOCK + '/' + index.toString();
+    return this.httpClient.get(url);
   }
 
   public getBlocks(): Observable<any> {
@@ -50,6 +53,16 @@ export class BlockchainService {
 
   public getTx(tranHash: string): Observable<any> {
     const url = ENDPOINTS.GET_TX + '/' + tranHash;
+    return this.httpClient.get(url).pipe(first());
+  }
+
+  public getAddressTxs(address: string): Observable<any> {
+    const url = ENDPOINTS.GET_ADD + '/' + address + '/transactions';
+    return this.httpClient.get(url).pipe(first());
+  }
+
+  public getAddressBalance(address: string): Observable<any> {
+    const url = ENDPOINTS.GET_ADD + '/' + address + '/balance';
     return this.httpClient.get(url).pipe(first());
   }
 
