@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 })
 export class WalletTransactionComponent implements OnInit {
   public transactionForm: FormGroup;
+  // public message: string;
 
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 

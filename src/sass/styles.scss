@@ -5,6 +5,14 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-mat-expansion-panel {
-    margin: .25rem auto !important;
+p, .mat-cell {
+    color: $textGrey !important;
+}
+
+h1, h2, h3 {
+    color: $headerGrey !important;
+}
+
+table {
+    width: 100%;
 }

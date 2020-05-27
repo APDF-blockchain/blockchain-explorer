@@ -45,8 +45,28 @@ export class WalletService {
       })
     };
 
-    return this.httpClient.post(url, httpOptions);
+    return this.httpClient.post(url, {password}, options);
   }
+
+  public sendTransaction(transaction: any): Observable<any>  {
+    const url = this.baseUrl + '/transactions/send';
+    // const transaction
+    return this.httpClient.post(url, transaction);
+  }
+
+
+  // private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
+  //   const randomEntropyBytes = ethers.utils.randomBytes(16);
+  //   const mnemonic = ethers.utils.HDNode.entropyToMnemonic(randomEntropyBytes);
+  //   const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+  //   const filename = "UTC_JSON_WALLET_" + Math.round(+ new Date() / 1000) + "_" + +(Math.floor(Math.random() * 200001) - 10000) + ".json";
+
+  //   wallet.encrypt(password).then((jsonWallet) => {
+  //     writeFileSync(this.walletDirectory + filename, jsonWallet, 'utf-8');
+  //   });
+  //   let rVal = { 'mnemonic': mnemonic, 'filename': filename };
+  //   return rVal;
+  // }
 
   public getBalance(address: string, unspentTxOuts: UnspentTxOut[]): number {
     return _(unspentTxOuts)
