@@ -45,7 +45,7 @@ export class WalletService {
       })
     };
 
-    return this.httpClient.post(url, {password}, options);
+    return this.httpClient.post(url, {password}, httpOptions);
   }
 
   public sendTransaction(transaction: any): Observable<any>  {
