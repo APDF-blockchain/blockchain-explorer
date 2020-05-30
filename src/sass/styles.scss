@@ -16,3 +16,11 @@ h1, h2, h3 {
 table {
     width: 100%;
 }
+
+tr.mat-row, tr.mat-footer-row {
+    height: 40px !important;
+}
+
+tr.mat-header-row:nth-child(2) {
+    height: 40px !important;
+}

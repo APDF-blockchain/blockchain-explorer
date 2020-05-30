@@ -11,7 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./blocks.component.scss']
 })
 export class BlocksComponent {
-  public displayedColumns: string[] = ['index', 'dateCreated'];
+  public displayedColumns = ['index', 'hash', 'dateCreated', 'transactionCount'];
+  public secondHeaderColumns = ['index-description', 'hash-description', 'dateCreated-description', 'transactionCount-description'];
   private blocks: any[] = [];
   public areDataLoaded = false;
   public dataSource: MatTableDataSource<any>;

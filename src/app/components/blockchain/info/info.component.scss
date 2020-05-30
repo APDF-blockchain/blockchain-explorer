@@ -1,10 +1,13 @@
 @import 'src/sass/variables';
 
-mat-card {
+.flexbox {
     display: flex;
     flex-wrap: wrap;
     div {
-        padding: 20px;
+        padding: 15px;
+    }
+    p {
+        margin: 0 0 5px;
     }
 }
 

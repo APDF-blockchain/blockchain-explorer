@@ -11,7 +11,8 @@ import { BlockchainService } from 'src/app/services/blockchain.service';
   styleUrls: ['./transactions.component.scss']
 })
 export class TransactionsComponent {
-  public displayedColumns: string[] = ['hashDateCreated', 'from', 'to'];
+  public displayedColumns = ['creationDate', 'hash', 'from', 'to'];
+  public secondHeaderColumns = ['creationDate-description', 'hashDateCreated-description', 'from-description', 'to-description'];
   private confirmedTx: any[] = [];
   public areDataLoaded = false;
   public dataSource: MatTableDataSource<any>;
