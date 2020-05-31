@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ec } from 'elliptic';
 import * as _ from 'lodash';
+import { sha256 } from 'js-sha256';
 
 // import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 // import { ethers } from 'ethers';
 
-import { TransactionService } from './transaction.service';
+import { Signature } from '../model/signature';
+import { WalletCreationComponent } from '../components/wallet/wallet-creation/wallet-creation.component';
+//import { TransactionService } from './transaction.service';
 import { UnspentTxOut } from '../model/unspent-tx-out';
 import { TxOut } from '../model/tx-out';
 import { Transaction } from '../model/transaction';
@@ -22,6 +25,8 @@ export class WalletService {
   private privateKeyLocation = 'node/wallet/private_key';
   private baseUrl = 'http://localhost:3001/';
   private walletUrl = 'http://localhost:4001/';
+  public allWallets : string[] = [];
+  public walletCreationComp : WalletCreationComponent;
 
   public wallet: any;
 
@@ -31,7 +36,7 @@ export class WalletService {
   private walletDirectory = 'node/wallet/';
 
 
-  constructor(private transactionService: TransactionService, private httpClient: HttpClient) {
+  constructor(/*private transactionService: TransactionService,*/ private httpClient: HttpClient, /*private walletCreationComp: WalletCreationComponent*/) {
     console.log('Hello');
   }
 
@@ -41,14 +46,14 @@ export class WalletService {
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
-
-    return this.httpClient.post(url, {password}, httpOptions);
+    //this.allWallets.push(this.wallet);
+    return this.httpClient.post(url, { password }, httpOptions);
   }
 
-  public sendTransaction(transaction: any): Observable<any>  {
+  public sendTransaction(transaction: any): Observable<any> {
     const url = this.baseUrl + '/transactions/send';
     // const transaction
     return this.httpClient.post(url, transaction);
@@ -73,66 +78,69 @@ export class WalletService {
       .filter((uTxO: UnspentTxOut) => uTxO.address === address)
       .map((uTxO: UnspentTxOut) => uTxO.amount)
       .sum();
-      // let rVal: number = 0;
-      // for (let i = 0; i < unspentTxOuts.length; i++) {
-      //   if (unspentTxOuts[i].address === address) {
-      //     rVal += unspentTxOuts[i].amount;
-      //   }
-      // }
-      // return rVal;
+    // let rVal: number = 0;
+    // for (let i = 0; i < unspentTxOuts.length; i++) {
+    //   if (unspentTxOuts[i].address === address) {
+    //     rVal += unspentTxOuts[i].amount;
+    //   }
+    // }
+    // return rVal;
   }
 
-  public findTxOutsForAmount(amount: number, myUnspentTxOuts: UnspentTxOut[]) {
-    let currentAmount = 0;
-    const includedUnspentTxOuts = [];
-    for (const myUnspentTxOut of myUnspentTxOuts) {
-      includedUnspentTxOuts.push(myUnspentTxOut);
-      currentAmount = currentAmount + myUnspentTxOut.amount;
-      if (currentAmount >= amount) {
-        const leftOverAmount = currentAmount - amount;
-        return { includedUnspentTxOuts, leftOverAmount };
+  // public findTxOutsForAmount(amount: number, myUnspentTxOuts: UnspentTxOut[]) {
+  //   let currentAmount = 0;
+  //   const includedUnspentTxOuts = [];
+  //   for (const myUnspentTxOut of myUnspentTxOuts) {
+  //     includedUnspentTxOuts.push(myUnspentTxOut);
+  //     currentAmount = currentAmount + myUnspentTxOut.amount;
+  //     if (currentAmount >= amount) {
+  //       const leftOverAmount = currentAmount - amount;
+  //       return { includedUnspentTxOuts, leftOverAmount };
+  //     }
+  //   }
+  //   throw Error('not enough coins to send transaction');
+  // }
+
+  // public createTxOuts(receiverAddress: string, myAddress: string, amount: number, leftOverAmount: number) {
+  //   const txOut1: TxOut = new TxOut(receiverAddress, amount);
+  //   if (leftOverAmount === 0) {
+  //     return [txOut1];
+  //   } else {
+  //     const leftOverTx = new TxOut(myAddress, leftOverAmount);
+  //     return [txOut1, leftOverTx];
+  //   }
+  // }
+
+  public convertDateToUTC(date) { return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); }
+
+  public createTransaction(senderAddress: string, recipientAddress: string, value: number,
+    message: string): Transaction {
+    const tx: Transaction = new Transaction();
+    const sig: Signature = new Signature();
+    //const s : WalletCreationComponent;
+    let today = new Date();
+    //let sigArr: string[] = [];
+    let _wallets: any[] = this.walletCreationComp.allWallets;
+    for (let i = 0; i < _wallets.length; i++) {
+      if (_wallets[i].address === senderAddress) {
+        tx.from === _wallets[i].address;
+        tx.to === recipientAddress;
+        tx.value === value;
+        tx.fee === 10;
+        tx.data === message;
+        tx.dateCreated === this.convertDateToUTC(today);
+        tx.senderPubKey === _wallets[i].publicKey;
+        let transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
+        let signature = this.EC.sign(transactionHash, _wallets[i].privateKey, "hex", { canonical: true });
+        sig.rVal === signature.r.toString("hex");
+        sig.sVal === signature.s.toString("hex");
+        //sigArr.push(sig.rVal, sig.sVal);
+        tx.senderSignature === [sig.rVal, sig.sVal];
+        console.log("Transaction : " + tx);
+        console.log("Transaction Date : " + tx.dateCreated);
+        console.log("Transaction Sig : " + tx.senderSignature);
       }
     }
-    throw Error('not enough coins to send transaction');
-  }
-
-  public createTxOuts(receiverAddress: string, myAddress: string, amount: number, leftOverAmount: number) {
-    const txOut1: TxOut = new TxOut(receiverAddress, amount);
-    if (leftOverAmount === 0) {
-      return [txOut1];
-    } else {
-      const leftOverTx = new TxOut(myAddress, leftOverAmount);
-      return [txOut1, leftOverTx];
-    }
-  }
-
-  public createTransaction(receiverAddress: string, amount: number,
-    privateKey: string, unspentTxOuts: UnspentTxOut[]): Transaction {
-
-    const myAddress: string = this.transactionService.getPublicKey(privateKey);
-    const myUnspentTxOuts = unspentTxOuts.filter((uTxO: UnspentTxOut) => uTxO.address === myAddress);
-
-    const { includedUnspentTxOuts, leftOverAmount } = this.findTxOutsForAmount(amount, myUnspentTxOuts);
-
-    const toUnsignedTxIn = (unspentTxOut: UnspentTxOut) => {
-      const txIn: TxIn = new TxIn();
-      txIn.txOutId = unspentTxOut.txOutId;
-      txIn.txOutIndex = unspentTxOut.txOutIndex;
-      return txIn;
-    }
-
-    const unsignedTxIns: TxIn[] = includedUnspentTxOuts.map(toUnsignedTxIn);
-
-    const tx: Transaction = new Transaction();
-    tx.txIns = unsignedTxIns;
-    tx.txOuts = this.createTxOuts(receiverAddress, myAddress, amount, leftOverAmount);
-    tx.id = this.transactionService.getTransactionId(tx);
-
-    tx.txIns = tx.txIns.map((txIn: TxIn, index: number) => {
-      txIn.signature = this.transactionService.signTxIn(tx, index, privateKey, unspentTxOuts);
-      return txIn;
-    });
-
     return tx;
   }
 }

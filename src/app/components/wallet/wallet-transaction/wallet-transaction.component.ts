@@ -20,12 +20,13 @@ export class WalletTransactionComponent implements OnInit {
   }
 
   public onSubmitTransaction(): void {
-    // let blockchain: Block[] = [genesisBlock];
-    // let unspentTxOuts: UnspentTxOut[] = processTransactions(blockchain[0].data, [], 0);
-    // const getUnspentTxOuts = (): UnspentTxOut[] => _.cloneDeep(unspentTxOuts);
-    const transaction = this.transactionForm.value;
-    console.log(this.walletService.wallet);
-    // this.walletService.createTransaction(transaction);
+    
+    const sender = this.transactionForm.value.sender;
+    const recipient = this.transactionForm.value.recipient;
+    const value = this.transactionForm.value.value;
+    const message = this.transactionForm.value.message;
+    //console.log(this.walletService.wallet);
+    this.walletService.createTransaction(sender, recipient, value, message);
     // TODO: After transaction, post to node
   }
 
@@ -34,7 +35,7 @@ export class WalletTransactionComponent implements OnInit {
       sender: ['', Validators.required],
       recipient: ['', Validators.required],
       value: ['', Validators.required],
-      blockchainNode: ['', Validators.required]
+      message: ['', Validators.required]
     });
   }
 }
