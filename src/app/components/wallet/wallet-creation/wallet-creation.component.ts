@@ -14,6 +14,7 @@ export class WalletCreationComponent implements OnInit {
   public hideConfirmPassword = true;
 
   public wallet: any;
+  public allWallets : string[] = [];
 
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 
@@ -29,6 +30,7 @@ export class WalletCreationComponent implements OnInit {
             console.log("POST call successful value returned in body",
                         val);
             this.wallet = val;
+            this.allWallets.push(this.wallet);
         },
         error => {
             console.log("POST call in error", error);
