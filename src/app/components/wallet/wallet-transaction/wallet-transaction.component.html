@@ -4,7 +4,9 @@
     (keydown.enter)="$event.preventDefault()">
     <div class="form-fields">
         <mat-form-field>
-            <input matInput type="text" placeholder="Sender" id="sender" formControlName="sender">
+            <mat-select matInput placeholder="sender" name="sender">
+                <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account">{{ account.address }}</mat-option>
+            </mat-select>
         </mat-form-field>
         <mat-form-field>
             <input matInput type="text" placeholder="Recipient" id="recipient" formControlName="recipient">
@@ -19,7 +21,7 @@
     </div>
 
     <div class="form-btns">
-        <button mat-raised-button color="primary" [disabled]="transactionForm.invalid">Send Transaction</button>
+        <button mat-raised-button color="primary" >Send Transaction</button>
     </div>
 
 </form>

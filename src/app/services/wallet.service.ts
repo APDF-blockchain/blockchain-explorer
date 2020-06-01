@@ -3,8 +3,8 @@ import { ec } from 'elliptic';
 import * as _ from 'lodash';
 import { sha256 } from 'js-sha256';
 
-// import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
-// import { ethers } from 'ethers';
+import * as bip39 from 'bip39';
+import * as bip32 from 'bip32';
 
 import { Signature } from '../model/signature';
 import { WalletCreationComponent } from '../components/wallet/wallet-creation/wallet-creation.component';
@@ -14,7 +14,11 @@ import { TxOut } from '../model/tx-out';
 import { Transaction } from '../model/transaction';
 import { TxIn } from '../model/tx-in';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import * as CryptoJS from 'crypto-js';
+import { IHDWallet, IAccount } from '../model/wallet';
+
+(window as any).global = window;
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +29,10 @@ export class WalletService {
   private privateKeyLocation = 'node/wallet/private_key';
   private baseUrl = 'http://localhost:3001/';
   private walletUrl = 'http://localhost:4001/';
-  public allWallets : string[] = [];
-  public walletCreationComp : WalletCreationComponent;
+  public allWallets: string[] = [];
+  public walletCreationComp: WalletCreationComponent;
+  private hdWallet: BehaviorSubject<IHDWallet>;
+  public hdWallet$: Observable<IHDWallet>;
 
   public wallet: any;
 
@@ -38,19 +44,46 @@ export class WalletService {
 
   constructor(/*private transactionService: TransactionService,*/ private httpClient: HttpClient, /*private walletCreationComp: WalletCreationComponent*/) {
     console.log('Hello');
+    this.hdWallet = new BehaviorSubject(null);
+    this.hdWallet$ = this.hdWallet.asObservable();
   }
 
-  public createWallet(password: string): Observable<any> {
-    const url = this.walletUrl + `wallet/create/${password}`;
-    //const options = { params: new HttpParams().set('password', password) };
+  public async createWallet(password: string): Promise<string> {
+    const mnemonic = bip39.generateMnemonic();
+    this.storeMnemonic(password, mnemonic);
+    const hdWallet = this.loadHDWallet(password, mnemonic);
+    this.hdWallet.next(hdWallet);
+    console.log(hdWallet);
+    return hdWallet.mnemonic;
+  }
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    //this.allWallets.push(this.wallet);
-    return this.httpClient.post(url, { password }, httpOptions);
+  public restoreWallet(password: string, mnemonic: string): void {
+    this.storeMnemonic(password, mnemonic);
+    const hdWallet = this.loadHDWallet(password, mnemonic);
+    this.hdWallet.next(hdWallet);
+  }
+
+  public logout(): void {
+    this.removeMnemonicFromStorage();
+    this.hdWallet.next(null);
+  }
+
+  public getStoredMnemonic(password: string): string{
+    const encryptedMnemonic = localStorage.getItem('encryptedMnemonic');
+    const decryptedMnemonic = CryptoJS.AES.decrypt(encryptedMnemonic, password).toString(CryptoJS.enc.Utf8);
+    return decryptedMnemonic;
+  }
+
+  public loadHDWallet(password: string, mnemonic: string): IHDWallet {
+    const isMnemonicValid = bip39.validateMnemonic(mnemonic);
+    if (!isMnemonicValid) {
+      throw new Error('Mnemonic is not valid');
+    }
+
+    const seed = bip39.mnemonicToSeedSync(mnemonic, password);
+    const hdNode = bip32.fromSeed(seed);
+    const accounts = this.derive5accountsFromHDNode(hdNode);
+    return { mnemonic, accounts };
   }
 
   public sendTransaction(transaction: any): Observable<any> {
@@ -59,6 +92,9 @@ export class WalletService {
     return this.httpClient.post(url, transaction);
   }
 
+  public isLoggedIn(): boolean {
+    return !!localStorage.getItem('encryptedMnemonic');
+  }
 
   // private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
   //   const randomEntropyBytes = ethers.utils.randomBytes(16);
@@ -143,4 +179,27 @@ export class WalletService {
     }
     return tx;
   }
+
+  private derive5accountsFromHDNode(hdNode: bip32.BIP32Interface): IAccount[] {
+    const accounts: IAccount[] = [];
+    for (let i = 0; i < 5; i++) {
+      const wallet = hdNode.derivePath('m/0/' + i);
+      accounts.push({
+        publicKey: wallet.publicKey.toString('hex'),
+        privateKey: wallet.privateKey.toString('hex'),
+        address: sha256(wallet.publicKey)
+      });
+    }
+    return accounts;
+  }
+
+  private storeMnemonic(password: string, mnemonic: string): void {
+    const encryptedMnemonic = CryptoJS.AES.encrypt(mnemonic, password).toString();
+    localStorage.setItem('encryptedMnemonic', encryptedMnemonic);
+  }
+
+  private removeMnemonicFromStorage(): void {
+    localStorage.removeItem('encryptedMnemonic');
+  }
+
 }

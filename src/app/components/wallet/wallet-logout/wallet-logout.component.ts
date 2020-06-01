@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { WalletService } from 'src/app/services/wallet.service';
 
 @Component({
   selector: 'app-wallet-logout',
   templateUrl: './wallet-logout.component.html',
   styleUrls: ['./wallet-logout.component.scss']
 })
-export class WalletLogoutComponent implements OnInit {
+export class WalletLogoutComponent {
 
-  constructor() { }
+  constructor(private walletService: WalletService) { }
 
-  ngOnInit(): void {
+  public onLogout(): void {
+    this.walletService.logout();
   }
 
 }
