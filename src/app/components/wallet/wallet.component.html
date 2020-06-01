@@ -7,13 +7,13 @@
             <mat-tab label="Open existing wallet">
                 <app-wallet-open></app-wallet-open>
             </mat-tab>
-            <mat-tab label="Account balance">
+            <mat-tab *ngIf="isHdWalletLoaded" label="Account balance">
                 <app-wallet-balance></app-wallet-balance>
             </mat-tab>
-            <mat-tab label="Send transaction">
+            <mat-tab *ngIf="isHdWalletLoaded" label="Send transaction">
                 <app-wallet-transaction></app-wallet-transaction>
             </mat-tab>
-            <mat-tab label="Logout">
+            <mat-tab *ngIf="isHdWalletLoaded" label="Logout">
                 <app-wallet-logout></app-wallet-logout>
             </mat-tab>
         </mat-tab-group>
