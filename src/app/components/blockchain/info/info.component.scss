@@ -1,0 +1,19 @@
+@import 'src/sass/variables';
+
+.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+        padding: 15px;
+    }
+    p {
+        margin: 0 0 5px;
+    }
+}
+
+.custom-underline {
+    width: 100%;
+    height: 1px;
+    display: block;
+    background: $light-grey;
+}

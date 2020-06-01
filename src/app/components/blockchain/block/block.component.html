@@ -1,0 +1,17 @@
+<ul>
+    <li *ngFor="let item of block | keyvalue">
+        <div *ngIf="item.key !== 'transactions' && item.key !== 'prevBlockHash'">
+            <b>{{item.key}}</b>: <b>{{item.value}}</b>
+        </div>
+        <div *ngIf="item.key === 'prevBlockHash'">
+            <b>{{ item.key }}</b>:
+            <a [routerLink]="['/', 'blocks', block.index - 1]">{{ item.value }}</a>
+        </div>
+        <ul *ngIf="item.key === 'transactions'">
+            <b>{{item.key}}</b>:
+            <li *ngFor="let tx of item.value">
+                <a [routerLink]="['/', 'transactions', tx.transactionDataHash]">{{tx.transactionDataHash}}</a>
+            </li>
+        </ul>
+    </li>
+</ul>
