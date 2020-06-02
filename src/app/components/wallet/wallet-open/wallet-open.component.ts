@@ -14,7 +14,7 @@ export class WalletOpenComponent implements OnInit {
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 
   public ngOnInit(): void {
-    this.initCreateWalletForm();
+    this.initRestoreWalletForm();
   }
 
   public onRestoreWallet(): void {
@@ -25,7 +25,7 @@ export class WalletOpenComponent implements OnInit {
     }
   }
 
-  private initCreateWalletForm(): void {
+  private initRestoreWalletForm(): void {
     this.restoreWalletForm = this.formBuilder.group({
       password: ['', Validators.required],
       mnemonic: ['', Validators.required]

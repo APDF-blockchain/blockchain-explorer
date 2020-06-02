@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
 
-const IS_MOCK_MODE = true;
+const IS_MOCK_MODE = false;
 const BASE_URL = IS_MOCK_MODE ? 'https://stormy-everglades-34766.herokuapp.com' : 'http://localhost:3001';
 const WS_ADDRESS = 'ws://localhost:6001';
 const ENDPOINTS = {

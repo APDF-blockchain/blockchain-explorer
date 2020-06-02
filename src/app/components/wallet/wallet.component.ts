@@ -9,18 +9,21 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./wallet.component.scss']
 })
 export class WalletComponent implements OnInit {
-  public navLinks = ['create', 'open', 'balance', 'transaction', 'logout'];
+  public navLinks = ['create', 'open', 'login', 'balance', 'transaction', 'logout'];
   public activeLinkIndex = 1;
   public isHdWalletLoaded = false;
+  public isMnemonicInStorage = false;
   private subscription = new Subscription();
 
   constructor(private router: Router, private walletService: WalletService) {
     const activeLink = this.router.url.split('/')[2];
     this.activeLinkIndex = this.navLinks.indexOf(activeLink);
-    const subscription = this.walletService.hdWallet$.subscribe(hdWallet => {
-      this.isHdWalletLoaded = !!hdWallet;
+    const subscription = this.walletService.hdWallet$.subscribe(hdWallet => this.isHdWalletLoaded = !!hdWallet);
+    const subscription2 = this.walletService.isMnemonicInStorage$.subscribe(isMnemonicInStorage => {
+      this.isMnemonicInStorage = isMnemonicInStorage;
     });
     this.subscription.add(subscription);
+    this.subscription.add(subscription2);
   }
 
   public ngOnInit(): void {

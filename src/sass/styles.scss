@@ -24,3 +24,15 @@ tr.mat-row, tr.mat-footer-row {
 tr.mat-header-row:nth-child(2) {
     height: 40px !important;
 }
+
+.notification-error, .notification-success {
+    color: #fff;
+}
+
+.notification-error {
+    background-color: $red;
+}
+
+.notification-success {
+    background-color: $green;
+}

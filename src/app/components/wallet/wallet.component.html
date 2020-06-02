@@ -4,8 +4,11 @@
             <mat-tab label="Create new wallet">
                 <app-wallet-creation></app-wallet-creation>
             </mat-tab>
-            <mat-tab label="Open existing wallet">
+            <mat-tab label="Open wallet from mnemonic">
                 <app-wallet-open></app-wallet-open>
+            </mat-tab>
+            <mat-tab *ngIf="isMnemonicInStorage" label="Login current wallet">
+                <app-wallet-login></app-wallet-login>
             </mat-tab>
             <mat-tab *ngIf="isHdWalletLoaded" label="Account balance">
                 <app-wallet-balance></app-wallet-balance>

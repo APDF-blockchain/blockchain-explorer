@@ -14,9 +14,12 @@ import { TxOut } from '../model/tx-out';
 import { Transaction } from '../model/transaction';
 import { TxIn } from '../model/tx-in';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 import { IHDWallet, IAccount } from '../model/wallet';
+import { BlockchainService } from './blockchain.service';
+import { NotificationService } from './notification.service';
+import { Router } from '@angular/router';
 
 (window as any).global = window;
 
@@ -33,6 +36,8 @@ export class WalletService {
   public walletCreationComp: WalletCreationComponent;
   private hdWallet: BehaviorSubject<IHDWallet>;
   public hdWallet$: Observable<IHDWallet>;
+  private isMnemonicInStorage: BehaviorSubject<boolean>;
+  public isMnemonicInStorage$: Observable<boolean>;
 
   public wallet: any;
 
@@ -42,30 +47,58 @@ export class WalletService {
   private walletDirectory = 'node/wallet/';
 
 
-  constructor(/*private transactionService: TransactionService,*/ private httpClient: HttpClient, /*private walletCreationComp: WalletCreationComponent*/) {
-    console.log('Hello');
+  constructor(
+    private httpClient: HttpClient,
+    private notificationService: NotificationService,
+    private router: Router
+    ) {
     this.hdWallet = new BehaviorSubject(null);
     this.hdWallet$ = this.hdWallet.asObservable();
+    const isMnemonicInStorage = !!localStorage.getItem('encryptedMnemonic');
+    this.isMnemonicInStorage = new BehaviorSubject(isMnemonicInStorage);
+    this.isMnemonicInStorage$ = this.isMnemonicInStorage.asObservable();
   }
 
   public async createWallet(password: string): Promise<string> {
-    const mnemonic = bip39.generateMnemonic();
-    this.storeMnemonic(password, mnemonic);
-    const hdWallet = this.loadHDWallet(password, mnemonic);
-    this.hdWallet.next(hdWallet);
-    console.log(hdWallet);
-    return hdWallet.mnemonic;
+    try {
+      const mnemonic = bip39.generateMnemonic();
+      this.storeMnemonic(password, mnemonic);
+      const hdWallet = this.loadHDWallet(password, mnemonic);
+      this.hdWallet.next(hdWallet);
+      console.log(hdWallet);
+      this.notificationService.sendSuccess(`New wallet successfully created,
+      don't forget to save your mnemonic on a safe place!`);
+      return hdWallet.mnemonic;
+    } catch (err) {
+      this.notificationService.sendError('Sorry, something went wrong while creating the new wallet');
+    }
+  }
+
+  public loginCurrentWallet(password: string): void {
+    try {
+      const mnemonic = this.getStoredMnemonic(password);
+      const hdWallet = this.loadHDWallet(password, mnemonic);
+      this.hdWallet.next(hdWallet);
+      this.notificationService.sendSuccess(`Successfully logged in!`);
+    } catch (err) {
+      this.notificationService.sendError(`Wrong passord. Maybe you should try to resotre it from mnemonic...`);
+    }
   }
 
   public restoreWallet(password: string, mnemonic: string): void {
-    this.storeMnemonic(password, mnemonic);
-    const hdWallet = this.loadHDWallet(password, mnemonic);
-    this.hdWallet.next(hdWallet);
+    try {
+      this.storeMnemonic(password, mnemonic);
+      const hdWallet = this.loadHDWallet(password, mnemonic);
+      this.hdWallet.next(hdWallet);
+      this.notificationService.sendSuccess(`We were able to restore a wallet from the info you provided!`);
+    } catch (err) {
+      this.notificationService.sendError(`Sorry, something went wrong while retrieving the wallet `);
+    }
   }
 
   public logout(): void {
-    this.removeMnemonicFromStorage();
     this.hdWallet.next(null);
+    this.notificationService.sendSuccess(`Successfully logged out!`);
   }
 
   public getStoredMnemonic(password: string): string{
@@ -92,9 +125,9 @@ export class WalletService {
     return this.httpClient.post(url, transaction);
   }
 
-  public isLoggedIn(): boolean {
-    return !!localStorage.getItem('encryptedMnemonic');
-  }
+  // public isMnemonicInStorage(): boolean {
+  //   return !!localStorage.getItem('encryptedMnemonic');
+  // }
 
   // private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
   //   const randomEntropyBytes = ethers.utils.randomBytes(16);
@@ -108,20 +141,6 @@ export class WalletService {
   //   let rVal = { 'mnemonic': mnemonic, 'filename': filename };
   //   return rVal;
   // }
-
-  public getBalance(address: string, unspentTxOuts: UnspentTxOut[]): number {
-    return _(unspentTxOuts)
-      .filter((uTxO: UnspentTxOut) => uTxO.address === address)
-      .map((uTxO: UnspentTxOut) => uTxO.amount)
-      .sum();
-    // let rVal: number = 0;
-    // for (let i = 0; i < unspentTxOuts.length; i++) {
-    //   if (unspentTxOuts[i].address === address) {
-    //     rVal += unspentTxOuts[i].amount;
-    //   }
-    // }
-    // return rVal;
-  }
 
   // public findTxOutsForAmount(amount: number, myUnspentTxOuts: UnspentTxOut[]) {
   //   let currentAmount = 0;
@@ -196,10 +215,12 @@ export class WalletService {
   private storeMnemonic(password: string, mnemonic: string): void {
     const encryptedMnemonic = CryptoJS.AES.encrypt(mnemonic, password).toString();
     localStorage.setItem('encryptedMnemonic', encryptedMnemonic);
+    this.isMnemonicInStorage.next(true);
   }
 
-  private removeMnemonicFromStorage(): void {
-    localStorage.removeItem('encryptedMnemonic');
-  }
+  // private removeMnemonicFromStorage(): void {
+  //   localStorage.removeItem('encryptedMnemonic');
+  //   this.isMnemonicInStorage.next(false);
+  // }
 
 }

@@ -15,7 +15,7 @@ export class WalletCreationComponent implements OnInit {
   public mnemonic: string;
 
   public wallet: any;
-  public allWallets : string[] = [];
+  public allWallets: string[] = [];
 
   constructor(private walletService: WalletService, private formBuilder: FormBuilder) { }
 

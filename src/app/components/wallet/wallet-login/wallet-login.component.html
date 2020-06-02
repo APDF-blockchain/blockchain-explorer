@@ -1,0 +1,17 @@
+<form 
+    [formGroup]="loginWalletForm" 
+    (ngSubmit)="onLoginWallet()"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="form-fields">
+        <mat-form-field>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="password" formControlName="password">
+            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <span class="material-icons">{{ hidePassword ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+        </mat-form-field>
+    </div>
+
+    <div class="form-btns">
+        <button mat-raised-button color="primary" [disabled]="loginWalletForm.invalid">Restore</button>
+    </div>
+</form>

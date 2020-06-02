@@ -30,7 +30,7 @@ export class WalletTransactionComponent implements OnInit {
     
     const sender = this.transactionForm.value.sender;
 
-    console.log(sender);
+    console.log(this.transactionForm.value);
     const recipient = this.transactionForm.value.recipient;
     const value = this.transactionForm.value.value;
     const message = this.transactionForm.value.message;
