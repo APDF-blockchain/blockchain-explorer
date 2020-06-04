@@ -132,6 +132,7 @@ export class WalletService {
     }
 
     const seed = bip39.mnemonicToSeedSync(mnemonic, password);
+
     const hdNode = bip32.fromSeed(seed);
     const accounts = this.derive5accountsFromHDNode(hdNode);
     return { mnemonic, accounts };
