@@ -4,7 +4,7 @@
     (keydown.enter)="$event.preventDefault()">
     <div class="form-fields">
         <mat-form-field>
-            <mat-select matInput placeholder="sender" formControlName="sender">
+            <mat-select matInput placeholder="Sender" formControlName="sender">
                 <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account">{{ account.address }}</mat-option>
             </mat-select>
         </mat-form-field>

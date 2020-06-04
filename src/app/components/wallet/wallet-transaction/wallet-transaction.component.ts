@@ -29,13 +29,11 @@ export class WalletTransactionComponent implements OnInit {
   public onSubmitTransaction(): void {
     
     const sender = this.transactionForm.value.sender;
-
-    console.log(this.transactionForm.value);
     const recipient = this.transactionForm.value.recipient;
     const value = this.transactionForm.value.value;
     const message = this.transactionForm.value.message;
     //console.log(this.walletService.wallet);
-    // this.walletService.createTransaction(sender, recipient, value, message);
+    this.walletService.sendTransaction(this.walletService.createTransaction(sender, recipient, value, message));
     // TODO: After transaction, post to node
   }
 

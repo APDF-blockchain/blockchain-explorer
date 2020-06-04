@@ -38,6 +38,7 @@ export class WalletService {
   public hdWallet$: Observable<IHDWallet>;
   private isMnemonicInStorage: BehaviorSubject<boolean>;
   public isMnemonicInStorage$: Observable<boolean>;
+  public passwords: string[] = [];
 
   public wallet: any;
 
@@ -51,7 +52,7 @@ export class WalletService {
     private httpClient: HttpClient,
     private notificationService: NotificationService,
     private router: Router
-    ) {
+  ) {
     this.hdWallet = new BehaviorSubject(null);
     this.hdWallet$ = this.hdWallet.asObservable();
     const isMnemonicInStorage = !!localStorage.getItem('encryptedMnemonic');
@@ -66,6 +67,7 @@ export class WalletService {
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       console.log(hdWallet);
+      //this.passwords.push(password);
       this.notificationService.sendSuccess(`New wallet successfully created,
       don't forget to save your mnemonic on a safe place!`);
       return hdWallet.mnemonic;
@@ -79,9 +81,17 @@ export class WalletService {
       const mnemonic = this.getStoredMnemonic(password);
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
+      // for (let i = 0; i < this.passwords.length; i++) {
+      //   if (this.passwords[i] === password) { 
+      //     this.passwords.splice(i, 1);
+      //     this.passwords.push(password);
+      //   } else {
+      //     this.passwords.push(password);
+      //   }
+      // }
       this.notificationService.sendSuccess(`Successfully logged in!`);
     } catch (err) {
-      this.notificationService.sendError(`Wrong passord. Maybe you should try to resotre it from mnemonic...`);
+      this.notificationService.sendError(`Wrong password. Maybe you should try to restore it from mnemonic...`);
     }
   }
 
@@ -90,9 +100,17 @@ export class WalletService {
       this.storeMnemonic(password, mnemonic);
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
+      // for (let i = 0; i < this.passwords.length; i++) {
+      //   if (this.passwords[i] === password) { 
+      //     this.passwords.splice(i, 1);
+      //     this.passwords.push(password);
+      //   } else {
+      //     this.passwords.push(password);
+      //   }
+      // }
       this.notificationService.sendSuccess(`We were able to restore a wallet from the info you provided!`);
     } catch (err) {
-      this.notificationService.sendError(`Sorry, something went wrong while retrieving the wallet `);
+      this.notificationService.sendError(`Sorry, something went wrong while retrieving the wallet. `);
     }
   }
 
@@ -101,7 +119,7 @@ export class WalletService {
     this.notificationService.sendSuccess(`Successfully logged out!`);
   }
 
-  public getStoredMnemonic(password: string): string{
+  public getStoredMnemonic(password: string): string {
     const encryptedMnemonic = localStorage.getItem('encryptedMnemonic');
     const decryptedMnemonic = CryptoJS.AES.decrypt(encryptedMnemonic, password).toString(CryptoJS.enc.Utf8);
     return decryptedMnemonic;
@@ -125,77 +143,27 @@ export class WalletService {
     return this.httpClient.post(url, transaction);
   }
 
-  // public isMnemonicInStorage(): boolean {
-  //   return !!localStorage.getItem('encryptedMnemonic');
-  // }
-
-  // private jsonFile(password: string) : {'mnemonic': string, 'filename': string} {
-  //   const randomEntropyBytes = ethers.utils.randomBytes(16);
-  //   const mnemonic = ethers.utils.HDNode.entropyToMnemonic(randomEntropyBytes);
-  //   const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-  //   const filename = "UTC_JSON_WALLET_" + Math.round(+ new Date() / 1000) + "_" + +(Math.floor(Math.random() * 200001) - 10000) + ".json";
-
-  //   wallet.encrypt(password).then((jsonWallet) => {
-  //     writeFileSync(this.walletDirectory + filename, jsonWallet, 'utf-8');
-  //   });
-  //   let rVal = { 'mnemonic': mnemonic, 'filename': filename };
-  //   return rVal;
-  // }
-
-  // public findTxOutsForAmount(amount: number, myUnspentTxOuts: UnspentTxOut[]) {
-  //   let currentAmount = 0;
-  //   const includedUnspentTxOuts = [];
-  //   for (const myUnspentTxOut of myUnspentTxOuts) {
-  //     includedUnspentTxOuts.push(myUnspentTxOut);
-  //     currentAmount = currentAmount + myUnspentTxOut.amount;
-  //     if (currentAmount >= amount) {
-  //       const leftOverAmount = currentAmount - amount;
-  //       return { includedUnspentTxOuts, leftOverAmount };
-  //     }
-  //   }
-  //   throw Error('not enough coins to send transaction');
-  // }
-
-  // public createTxOuts(receiverAddress: string, myAddress: string, amount: number, leftOverAmount: number) {
-  //   const txOut1: TxOut = new TxOut(receiverAddress, amount);
-  //   if (leftOverAmount === 0) {
-  //     return [txOut1];
-  //   } else {
-  //     const leftOverTx = new TxOut(myAddress, leftOverAmount);
-  //     return [txOut1, leftOverTx];
-  //   }
-  // }
-
-  public convertDateToUTC(date) { return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); }
-
-  public createTransaction(senderAddress: string, recipientAddress: string, value: number,
+  public createTransaction(senderAddress: IAccount, recipientAddress: string, value: number,
     message: string): Transaction {
     const tx: Transaction = new Transaction();
     const sig: Signature = new Signature();
-    //const s : WalletCreationComponent;
-    let today = new Date();
-    //let sigArr: string[] = [];
-    let _wallets: any[] = this.walletCreationComp.allWallets;
-    for (let i = 0; i < _wallets.length; i++) {
-      if (_wallets[i].address === senderAddress) {
-        tx.from === _wallets[i].address;
-        tx.to === recipientAddress;
-        tx.value === value;
-        tx.fee === 10;
-        tx.data === message;
-        tx.dateCreated === this.convertDateToUTC(today);
-        tx.senderPubKey === _wallets[i].publicKey;
-        let transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
-        let signature = this.EC.sign(transactionHash, _wallets[i].privateKey, "hex", { canonical: true });
-        sig.rVal === signature.r.toString("hex");
-        sig.sVal === signature.s.toString("hex");
-        //sigArr.push(sig.rVal, sig.sVal);
-        tx.senderSignature === [sig.rVal, sig.sVal];
-        console.log("Transaction : " + tx);
-        console.log("Transaction Date : " + tx.dateCreated);
-        console.log("Transaction Sig : " + tx.senderSignature);
-      }
-    }
+    const sigArr: string[] = [];
+    let today = new Date().toISOString();
+    tx.from = senderAddress.address;
+    tx.to = recipientAddress;
+    tx.value = value;
+    tx.fee = 10;
+    tx.data = message;
+    tx.dateCreated = today;
+    tx.senderPubKey = senderAddress.publicKey;
+    let sigKey = this.EC.keyFromPrivate(senderAddress.privateKey);
+    let transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
+    let signature = sigKey.sign(transactionHash);
+    sig.rVal = signature.r.toString("hex");
+    sig.sVal = signature.s.toString("hex");
+    sigArr.push(sig.rVal, sig.sVal);
+    tx.senderSignature = sigArr;
+    console.log(tx);
     return tx;
   }
 

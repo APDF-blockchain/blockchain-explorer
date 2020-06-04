@@ -22,7 +22,7 @@ export class Transaction {
   /**
    * @description - ISO8601 date
    */
-  public dateCreated: Date;
+  public dateCreated: string;
   /**
    * @description - string (optional)
    */
