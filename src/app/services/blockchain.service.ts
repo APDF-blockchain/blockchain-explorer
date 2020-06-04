@@ -33,8 +33,6 @@ export class BlockchainService {
   }
 
   public getBlock(index: number): Observable<any> {
-    console.log(index);
-    // const options = { params: new HttpParams().set('index', index.toString()) };
     const url = ENDPOINTS.GET_BLOCK + '/' + index.toString();
     return this.httpClient.get(url);
   }

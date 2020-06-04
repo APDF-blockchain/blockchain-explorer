@@ -31,7 +31,8 @@ export class BlocksComponent {
       this.dataSource.paginator = this.paginator;
     });
     const subscription2 = this.blockchainService.myWebSocket$.subscribe(stream => {
-      if (stream.data) {
+      console.log(stream.type);
+      if (stream.type === 2 && stream.data) {
         const newBlock = JSON.parse(stream.data)[0];
         this.blocks.unshift(newBlock);
         this.dataSource.data = this.blocks;

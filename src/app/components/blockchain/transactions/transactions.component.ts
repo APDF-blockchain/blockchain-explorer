@@ -22,6 +22,7 @@ export class TransactionsComponent {
 
   constructor(private blockchainService: BlockchainService, public dialog: MatDialog) {
     this.loadConfirmedTx();
+    this.listenToTransactionStream();
   }
 
   private loadConfirmedTx(): void {
@@ -31,5 +32,16 @@ export class TransactionsComponent {
       this.dataSource.paginator = this.paginator;
     });
     this.subscription.add(subscription1);
+  }
+
+  private listenToTransactionStream(): void {
+    const subscription = this.blockchainService.myWebSocket$.subscribe(stream => {
+      if (stream.type === 4 && stream.data) {
+        const txs = JSON.parse(stream.data);
+        this.confirmedTx.unshift(...txs);
+        this.dataSource.data = this.confirmedTx;
+      }
+    });
+    this.subscription.add(subscription);
   }
 }
