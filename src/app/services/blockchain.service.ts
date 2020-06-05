@@ -3,19 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
-
-const IS_MOCK_MODE = false;
-const BASE_URL = IS_MOCK_MODE ? 'https://stormy-everglades-34766.herokuapp.com' : 'http://localhost:3001';
-const WS_ADDRESS = 'ws://localhost:6001';
-const ENDPOINTS = {
-  GET_INFO: BASE_URL + '/info',
-  GET_BLOCKS: BASE_URL + '/blocks',
-  GET_BLOCK: BASE_URL + '/blocks',
-  GET_CONFIRMED_TX: BASE_URL + '/transactions/confirmed',
-  GET_PENDING_TX: BASE_URL + '/transactions/pending',
-  GET_TX: BASE_URL + '/transactions',
-  GET_ADD: BASE_URL +  '/address'
-};
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,43 +17,43 @@ export class BlockchainService {
   }
 
   public getInfo(): Observable<any> {
-    return this.httpClient.get(ENDPOINTS.GET_INFO).pipe(first());
+    return this.httpClient.get(environment.endPoints.getInfo).pipe(first());
   }
 
   public getBlock(index: number): Observable<any> {
-    const url = ENDPOINTS.GET_BLOCK + '/' + index.toString();
+    const url = environment.endPoints.getBlock + '/' + index.toString();
     return this.httpClient.get(url);
   }
 
   public getBlocks(): Observable<any> {
-    return this.httpClient.get(ENDPOINTS.GET_BLOCKS);
+    return this.httpClient.get(environment.endPoints.getBlocks);
   }
 
   public getConfirmedTx(): Observable<any> {
-    return this.httpClient.get(ENDPOINTS.GET_CONFIRMED_TX);
+    return this.httpClient.get(environment.endPoints.getConfirmedTx);
   }
 
   public getPendingTx(): Observable<any> {
-    return this.httpClient.get(ENDPOINTS.GET_PENDING_TX);
+    return this.httpClient.get(environment.endPoints.getPendingTx);
   }
 
   public getTx(tranHash: string): Observable<any> {
-    const url = ENDPOINTS.GET_TX + '/' + tranHash;
+    const url = environment.endPoints.getTx+ '/' + tranHash;
     return this.httpClient.get(url).pipe(first());
   }
 
   public getAddressTxs(address: string): Observable<any> {
-    const url = ENDPOINTS.GET_ADD + '/' + address + '/transactions';
+    const url = environment.endPoints.getAddress + '/' + address + '/transactions';
     return this.httpClient.get(url).pipe(first());
   }
 
   public getAddressBalance(address: string): Observable<any> {
-    const url = ENDPOINTS.GET_ADD + '/' + address + '/balance';
+    const url = environment.endPoints.getAddress + '/' + address + '/balance';
     return this.httpClient.get(url).pipe(first());
   }
 
   private initWS() {
-    this.myWebSocket = webSocket(WS_ADDRESS);
+    this.myWebSocket = webSocket(environment.wsAddress);
     this.myWebSocket$ = this.myWebSocket.asObservable();
   }
 

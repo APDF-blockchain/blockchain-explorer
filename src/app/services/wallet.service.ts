@@ -1,25 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ec } from 'elliptic';
 import * as _ from 'lodash';
 import { sha256 } from 'js-sha256';
-
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-
-import { Signature } from '../model/signature';
-import { WalletCreationComponent } from '../components/wallet/wallet-creation/wallet-creation.component';
-//import { TransactionService } from './transaction.service';
-import { UnspentTxOut } from '../model/unspent-tx-out';
-import { TxOut } from '../model/tx-out';
-import { Transaction } from '../model/transaction';
-import { TxIn } from '../model/tx-in';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 import { IHDWallet, IAccount } from '../model/wallet';
-import { BlockchainService } from './blockchain.service';
 import { NotificationService } from './notification.service';
-import { Router } from '@angular/router';
 
 (window as any).global = window;
 
@@ -27,32 +14,12 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class WalletService {
-
-  public EC = new ec('secp256k1');
-  private privateKeyLocation = 'node/wallet/private_key';
-  private baseUrl = 'http://localhost:3001/';
-  private walletUrl = 'http://localhost:4001/';
-  public allWallets: string[] = [];
-  public walletCreationComp: WalletCreationComponent;
   private hdWallet: BehaviorSubject<IHDWallet>;
   public hdWallet$: Observable<IHDWallet>;
   private isMnemonicInStorage: BehaviorSubject<boolean>;
   public isMnemonicInStorage$: Observable<boolean>;
-  public passwords: string[] = [];
 
-  public wallet: any;
-
-  /**
-   * @description - the wallet directory
-   */
-  private walletDirectory = 'node/wallet/';
-
-
-  constructor(
-    private httpClient: HttpClient,
-    private notificationService: NotificationService,
-    private router: Router
-  ) {
+  constructor(private notificationService: NotificationService) {
     this.hdWallet = new BehaviorSubject(null);
     this.hdWallet$ = this.hdWallet.asObservable();
     const isMnemonicInStorage = !!localStorage.getItem('encryptedMnemonic');
@@ -66,10 +33,9 @@ export class WalletService {
       this.storeMnemonic(password, mnemonic);
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
-      console.log(hdWallet);
-      //this.passwords.push(password);
       this.notificationService.sendSuccess(`New wallet successfully created,
       don't forget to save your mnemonic on a safe place!`);
+      console.log(hdWallet);
       return hdWallet.mnemonic;
     } catch (err) {
       this.notificationService.sendError('Sorry, something went wrong while creating the new wallet');
@@ -81,14 +47,6 @@ export class WalletService {
       const mnemonic = this.getStoredMnemonic(password);
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
-      // for (let i = 0; i < this.passwords.length; i++) {
-      //   if (this.passwords[i] === password) {
-      //     this.passwords.splice(i, 1);
-      //     this.passwords.push(password);
-      //   } else {
-      //     this.passwords.push(password);
-      //   }
-      // }
       this.notificationService.sendSuccess(`Successfully logged in!`);
     } catch (err) {
       this.notificationService.sendError(`Wrong password. Maybe you should try to restore it from mnemonic...`);
@@ -100,14 +58,6 @@ export class WalletService {
       this.storeMnemonic(password, mnemonic);
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
-      // for (let i = 0; i < this.passwords.length; i++) {
-      //   if (this.passwords[i] === password) {
-      //     this.passwords.splice(i, 1);
-      //     this.passwords.push(password);
-      //   } else {
-      //     this.passwords.push(password);
-      //   }
-      // }
       this.notificationService.sendSuccess(`We were able to restore a wallet from the info you provided!`);
     } catch (err) {
       this.notificationService.sendError(`Sorry, something went wrong while retrieving the wallet. `);
@@ -138,43 +88,6 @@ export class WalletService {
     return { mnemonic, accounts };
   }
 
-  public sendTransaction(transaction: Transaction): Observable<any> {
-    const url = this.baseUrl + 'transactions/send';
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
-
-    return this.httpClient.post<any>(url, transaction, httpOptions);
-  }
-
-  public createTransaction(senderAddress: IAccount, recipientAddress: string, value: number,
-    message: string): Transaction {
-    const tx: Transaction = new Transaction();
-    const sig: Signature = new Signature();
-    const sigArr: string[] = [];
-    let today = new Date().toISOString();
-    tx.from = senderAddress.address;
-    tx.to = recipientAddress;
-    tx.value = value;
-    tx.fee = 10;
-    tx.data = message;
-    tx.dateCreated = today;
-    tx.senderPubKey = senderAddress.publicKey;
-    let sigKey = this.EC.keyFromPrivate(senderAddress.privateKey);
-    let transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
-    tx.transactionDataHash = transactionHash;
-    let signature = sigKey.sign(transactionHash);
-    sig.rVal = signature.r.toString("hex");
-    sig.sVal = signature.s.toString("hex");
-    sigArr.push(sig.rVal, sig.sVal);
-    tx.senderSignature = sigArr;
-    console.log(tx);
-    return tx;
-  }
-
   private derive5accountsFromHDNode(hdNode: bip32.BIP32Interface): IAccount[] {
     const accounts: IAccount[] = [];
     for (let i = 0; i < 5; i++) {
@@ -193,10 +106,5 @@ export class WalletService {
     localStorage.setItem('encryptedMnemonic', encryptedMnemonic);
     this.isMnemonicInStorage.next(true);
   }
-
-  // private removeMnemonicFromStorage(): void {
-  //   localStorage.removeItem('encryptedMnemonic');
-  //   this.isMnemonicInStorage.next(false);
-  // }
 
 }
