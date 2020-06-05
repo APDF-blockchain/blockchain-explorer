@@ -30,7 +30,6 @@ export class FaucetComponent  implements OnInit, OnDestroy {
   }
 
   public onSubmitfundRequestForm(): void {
-
     const sender = environment.faucet.faucetAccount;
     const recipient = this.fundRequestForm.value.recipient;
     const value = environment.faucet.faucetTxValue;

@@ -38,7 +38,6 @@ export class WalletTransactionComponent implements OnInit, OnDestroy {
   }
 
   public onSubmitTransaction(): void {
-
     const sender = this.transactionForm.value.sender;
     const recipient = this.transactionForm.value.recipient;
     const value = this.transactionForm.value.value;
