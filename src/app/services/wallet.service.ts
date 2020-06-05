@@ -82,7 +82,7 @@ export class WalletService {
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       // for (let i = 0; i < this.passwords.length; i++) {
-      //   if (this.passwords[i] === password) { 
+      //   if (this.passwords[i] === password) {
       //     this.passwords.splice(i, 1);
       //     this.passwords.push(password);
       //   } else {
@@ -101,7 +101,7 @@ export class WalletService {
       const hdWallet = this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       // for (let i = 0; i < this.passwords.length; i++) {
-      //   if (this.passwords[i] === password) { 
+      //   if (this.passwords[i] === password) {
       //     this.passwords.splice(i, 1);
       //     this.passwords.push(password);
       //   } else {
@@ -165,6 +165,7 @@ export class WalletService {
     tx.senderPubKey = senderAddress.publicKey;
     let sigKey = this.EC.keyFromPrivate(senderAddress.privateKey);
     let transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
+    tx.transactionDataHash = transactionHash;
     let signature = sigKey.sign(transactionHash);
     sig.rVal = signature.r.toString("hex");
     sig.sVal = signature.s.toString("hex");

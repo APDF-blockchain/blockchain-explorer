@@ -39,19 +39,11 @@ export class Transaction {
    * @description - hex number[2][64]
    */
   public senderSignature: string[] = [];
-  // /**
-  //  * @description - integer/null.  Set by the miner.
-  //  */
-  // public minedInBlockIndex: number; 
-  // /**
-  //  * @description - boolean. Set by the miner.
-  //  */
-  // public tranferSuccessful: boolean;
 
-  // /**
-  //  * @description - number of times transaction has been confirmed
-  //  */
-  // public confirmationCount: number;
+  /**
+   * @description - hash of the transaction
+   */
+  public transactionDataHash: string;
 
   /**
    * @description - default empty constructor
