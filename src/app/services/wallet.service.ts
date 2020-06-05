@@ -138,10 +138,16 @@ export class WalletService {
     return { mnemonic, accounts };
   }
 
-  public sendTransaction(transaction: any): Observable<any> {
-    const url = this.baseUrl + '/transactions/send';
-    // const transaction
-    return this.httpClient.post(url, transaction);
+  public sendTransaction(transaction: Transaction): Observable<any> {
+    const url = this.baseUrl + 'transactions/send';
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+
+    return this.httpClient.post<any>(url, transaction, httpOptions);
   }
 
   public createTransaction(senderAddress: IAccount, recipientAddress: string, value: number,

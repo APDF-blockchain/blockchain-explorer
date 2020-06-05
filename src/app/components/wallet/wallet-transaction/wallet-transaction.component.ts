@@ -17,7 +17,7 @@ export class WalletTransactionComponent implements OnInit {
   private subscription = new Subscription();
   public hdWallet: IHDWallet;
 
-  constructor(private walletService: WalletService, private formBuilder: FormBuilder) { 
+  constructor(private walletService: WalletService, private formBuilder: FormBuilder) {
     const subscription = this.walletService.hdWallet$.subscribe(hdWallet => this.hdWallet = hdWallet);
     this.subscription.add(subscription);
   }
@@ -27,13 +27,17 @@ export class WalletTransactionComponent implements OnInit {
   }
 
   public onSubmitTransaction(): void {
-    
+
     const sender = this.transactionForm.value.sender;
     const recipient = this.transactionForm.value.recipient;
     const value = this.transactionForm.value.value;
     const message = this.transactionForm.value.message;
     //console.log(this.walletService.wallet);
-    this.walletService.sendTransaction(this.walletService.createTransaction(sender, recipient, value, message));
+    this.walletService.sendTransaction(this.walletService.createTransaction(sender, recipient, value, message)).subscribe(
+      res => {
+        console.log(res);
+      }
+    );
     // TODO: After transaction, post to node
   }
 
