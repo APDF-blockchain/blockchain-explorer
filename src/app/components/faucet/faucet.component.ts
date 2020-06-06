@@ -22,7 +22,7 @@ export class FaucetComponent  implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.initTransactionForm();
+    this.initFaucetForm();
   }
 
   public ngOnDestroy(): void {
@@ -40,7 +40,7 @@ export class FaucetComponent  implements OnInit, OnDestroy {
     );
   }
 
-  private initTransactionForm(): void {
+  private initFaucetForm(): void {
     this.fundRequestForm = this.formBuilder.group({
       recipient: ['', Validators.required]
     });

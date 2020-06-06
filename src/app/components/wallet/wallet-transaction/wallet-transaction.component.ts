@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { IHDWallet } from 'src/app/model/wallet';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TransactionService } from 'src/app/services/transaction.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-wallet-transaction',
@@ -18,6 +19,7 @@ export class WalletTransactionComponent implements OnInit, OnDestroy {
   // public message: string;
   private subscription = new Subscription();
   public hdWallet: IHDWallet;
+  public txDataHash: string;
 
   constructor(
     private walletService: WalletService,
@@ -43,7 +45,10 @@ export class WalletTransactionComponent implements OnInit, OnDestroy {
     const value = this.transactionForm.value.value;
     const message = this.transactionForm.value.message;
     this.transactionService.sendTransaction(sender, recipient, value, message).subscribe(
-      res => this.notificationService.sendSuccess('Transaction sent successfully'),
+      res => {
+        this.notificationService.sendSuccess('Transaction sent successfully');
+        this.txDataHash = res.transactionDataHash;
+      },
       err => this.notificationService.sendError(err.error.error)
     );
   }

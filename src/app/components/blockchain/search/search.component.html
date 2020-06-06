@@ -1,0 +1,16 @@
+<mat-card>
+    <form 
+    [formGroup]="searchForm" 
+    (ngSubmit)="onSearch()"
+    (keydown.enter)="$event.preventDefault()">
+        <div class="form-fields">
+            <mat-form-field>
+                <input matInput type="search" placeholder="Enter a block hash, a transaction hash or an address" formControlName="hash">
+            </mat-form-field>  
+        </div>
+
+        <div class="form-btns">
+            <button mat-raised-button color="primary" >Search</button>
+        </div>
+    </form>
+</mat-card>

@@ -9,6 +9,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { BlockComponent } from './block/block.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { AddressComponent } from './address/address.component';
+import { SearchComponent } from './search/search.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AddressComponent } from './address/address.component';
     TransactionsComponent,
     BlockComponent,
     TransactionComponent,
-    AddressComponent
+    AddressComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,

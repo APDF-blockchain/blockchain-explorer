@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class BlockchainService {
   }
 
   public getTx(tranHash: string): Observable<any> {
-    const url = environment.endPoints.getTx+ '/' + tranHash;
+    const url = environment.endPoints.getTx + '/' + tranHash;
     return this.httpClient.get(url).pipe(first());
   }
 

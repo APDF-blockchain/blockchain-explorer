@@ -23,7 +23,10 @@ export class TransactionComponent {
         return this.blockchainService.getTx(blockIndex);
       }),
       first()
-    ).subscribe(tx => this.tx = tx);
+    ).subscribe(res => {
+      this.tx = res[0];
+      console.log(this.tx);
+    });
   }
 
 }

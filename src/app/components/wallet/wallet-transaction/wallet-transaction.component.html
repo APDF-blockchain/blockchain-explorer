@@ -25,3 +25,5 @@
     </div>
 
 </form>
+
+<a *ngIf="txDataHash" target="_blank" [routerLink]="['/', 'transactions', txDataHash]">See transaction {{ txDataHash }}</a>
