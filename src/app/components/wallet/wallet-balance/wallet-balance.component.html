@@ -1,0 +1,15 @@
+<form 
+    [formGroup]="balanceForm" 
+    (ngSubmit)="onDisplayBalance()"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="form-fields">
+        <mat-form-field>
+            <mat-select matInput placeholder="address" name="address">
+                <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account?.address">{{ account.address }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="form-btns">
+        <button mat-raised-button color="primary" [disabled]="balanceForm.invalid">Display Balance</button>
+    </div>
+</form>

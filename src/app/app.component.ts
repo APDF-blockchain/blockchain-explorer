@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BlockchainService } from './services/blockchain.service';
 
 @Component({
   selector: 'app-root',

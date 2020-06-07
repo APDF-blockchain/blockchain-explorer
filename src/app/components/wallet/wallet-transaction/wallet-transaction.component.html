@@ -1,0 +1,29 @@
+<form 
+    [formGroup]="transactionForm" 
+    (ngSubmit)="onSubmitTransaction()"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="form-fields">
+        <mat-form-field>
+            <mat-select matInput placeholder="Sender" formControlName="sender">
+                <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account">{{ account.address }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" placeholder="Recipient" formControlName="recipient">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Value" formControlName="value">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput type="text" placeholder="Message" formControlName="message">
+        </mat-form-field>    
+    </div>
+
+    <div class="form-btns">
+        <button mat-raised-button color="primary" >Send Transaction</button>
+    </div>
+
+</form>
+
+<a *ngIf="txDataHash" target="_blank" [routerLink]="['/', 'transactions', txDataHash]">See transaction {{ txDataHash }}</a>

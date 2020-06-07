@@ -1,0 +1,16 @@
+<mat-card>
+    <form 
+    [formGroup]="fundRequestForm" 
+    (ngSubmit)="onSubmitfundRequestForm()"
+    (keydown.enter)="$event.preventDefault()">
+        <div class="form-fields">
+            <mat-form-field>
+                <input matInput type="text" placeholder="Recipient" formControlName="recipient">
+            </mat-form-field>  
+        </div>
+
+        <div class="form-btns">
+            <button mat-raised-button color="primary" >Request</button>
+        </div>
+    </form>
+</mat-card>
