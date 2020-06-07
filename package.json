@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node patch.js"
+    "postinstall": "node patch.js && ng build"
   },
   "private": true,
   "dependencies": {
@@ -29,10 +29,12 @@
     "bip39": "3.0.2",
     "crypto-js": "^4.0.0",
     "elliptic": "^6.5.2",
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
     "jasmine": "^3.5.0",
     "jest": "^26.0.1",
     "js-sha256": "^0.9.0",
+    "path": "^0.12.7",
     "rxjs": "~6.5.4",
     "stream": "0.0.2",
     "tslib": "^1.10.0",
