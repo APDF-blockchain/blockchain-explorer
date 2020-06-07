@@ -2,8 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const baseUrl = 'http://localhost:3001';
-const wsAddress = 'ws://localhost:6001';
+const baseUrl = 'https://awesome-blockchain-node.herokuapp.com';
+const wsAddress = 'ws://awesome-blockchain-node.herokuapp.com:6001';
 
 export const environment = {
   production: false,

@@ -35,7 +35,6 @@ export class WalletService {
       this.hdWallet.next(hdWallet);
       this.notificationService.sendSuccess(`New wallet successfully created,
       don't forget to save your mnemonic on a safe place!`);
-      console.log(hdWallet);
       return hdWallet.mnemonic;
     } catch (err) {
       this.notificationService.sendError('Sorry, something went wrong while creating the new wallet');
