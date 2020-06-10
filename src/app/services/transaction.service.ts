@@ -47,7 +47,7 @@ export class TransactionService {
     tx.dateCreated = today;
     tx.senderPubKey = senderAddress.publicKey;
     const sigKey = this.EC.keyFromPrivate(senderAddress.privateKey);
-    const transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
+    const transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.dateCreated + tx.senderPubKey));
     tx.transactionDataHash = transactionHash;
     const signature = sigKey.sign(transactionHash);
     sig.rVal = signature.r.toString('hex');
