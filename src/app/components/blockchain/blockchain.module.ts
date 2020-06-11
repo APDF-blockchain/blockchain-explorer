@@ -10,6 +10,8 @@ import { BlockComponent } from './block/block.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { AddressComponent } from './address/address.component';
 import { SearchComponent } from './search/search.component';
+import { PeersComponent } from './peers/peers.component';
+import { MapComponent } from './peers/map/map.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { SearchComponent } from './search/search.component';
     BlockComponent,
     TransactionComponent,
     AddressComponent,
-    SearchComponent
+    SearchComponent,
+    PeersComponent,
+    MapComponent
   ],
   imports: [
     CommonModule,

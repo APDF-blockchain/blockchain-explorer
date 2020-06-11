@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+// var dns = require('dns');
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,30 @@ export class BlockchainService {
   public getAddressBalance(address: string): Observable<any> {
     const url = environment.endPoints.getAddress + '/' + address + '/balance';
     return this.httpClient.get(url).pipe(first());
+  }
+
+  public getPeers(): Observable<any> {
+    const url = environment.endPoints.getPeers;
+    // var w3 = dns.lookup('w3schools.com', function (err, addresses, family) {
+    //   console.log(addresses);
+    // });
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude);
+   });
+    // this.httpClient.get('https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey=at_DFFOrPAQTWpQpvrhaTCO6xvB8N02X&ipAddress=127.0.0.1').subscribe(res => {
+    //   console.log(res);
+    // });
+    // return this.httpClient.get(url).pipe(first());
+    return of([
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-73.585071, 45.4696563]
+        }
+      }
+    ]);
   }
 
   private initWS() {

@@ -19,7 +19,8 @@ export const environment = {
     getPendingTx: baseUrl + '/transactions/pending',
     getTx: baseUrl + '/transactions',
     postTx: baseUrl + '/transactions/send',
-    getAddress: baseUrl + '/address'
+    getAddress: baseUrl + '/address',
+    getPeers: baseUrl + '/peers'
   },
   faucet: {
     faucetTxValue: 1000,
