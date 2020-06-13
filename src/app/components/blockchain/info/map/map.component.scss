@@ -1,0 +1,12 @@
+@import 'src/sass/variables';
+
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+.loading {
+    display: none;
+}

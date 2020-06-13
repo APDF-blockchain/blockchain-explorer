@@ -29,7 +29,8 @@ export const environment = {
       privateKey: 'cb3aabb88a7d00b2370558897b1f1e7a69a22815a5133da4db9d1d69d8ffbad2',
       publicKey: '0381753f1277e0c01302d7f4f3a474c78b3831bb9a3ab4c4619bbb3e4fcf3fd240'
     }
-  }
+  },
+  locationApiBaseUrl: 'https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey=at_DFFOrPAQTWpQpvrhaTCO6xvB8N02X&'
 };
 
 /*

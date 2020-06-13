@@ -36,3 +36,11 @@ tr.mat-header-row:nth-child(2) {
 .notification-success {
     background-color: $green;
 }
+
+.mapboxgl-control-container {
+    display: none !important;
+}
+
+.mapboxgl-canvas {
+    height: 100%;
+}

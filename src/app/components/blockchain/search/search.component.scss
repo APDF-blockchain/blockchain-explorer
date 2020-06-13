@@ -1,9 +1,17 @@
+h2 {
+    margin: 0;
+}
+
 form {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.form-fields {
+    flex: 1;
+}
+
 mat-form-field {
-    width: 80vw;
+    width: 95%;
 }

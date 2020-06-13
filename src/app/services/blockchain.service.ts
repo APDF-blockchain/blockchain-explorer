@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { ILocationApiResponse } from '../model/locationApiResponse';
+import { IGeoJson } from '../model/geoJSON';
 // var dns = require('dns');
 
 @Injectable({
@@ -11,9 +13,14 @@ import { environment } from 'src/environments/environment';
 })
 export class BlockchainService {
   private myWebSocket: WebSocketSubject<any>;
+  private mapDataStream: BehaviorSubject<IGeoJson>;
   public myWebSocket$: Observable<any>;
+  public mapDataStream$: Observable<IGeoJson>;
 
   constructor(private httpClient: HttpClient) {
+    this.mapDataStream = new BehaviorSubject(null);
+    this.mapDataStream$ = this.mapDataStream.asObservable();
+    this.initPeers();
     this.initWS();
   }
 
@@ -53,33 +60,53 @@ export class BlockchainService {
     return this.httpClient.get(url).pipe(first());
   }
 
-  public getPeers(): Observable<any> {
+  private initPeers(): void {
     const url = environment.endPoints.getPeers;
-    // var w3 = dns.lookup('w3schools.com', function (err, addresses, family) {
-    //   console.log(addresses);
-    // });
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position.coords.latitude);
-      console.log(position.coords.longitude);
-   });
-    // this.httpClient.get('https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey=at_DFFOrPAQTWpQpvrhaTCO6xvB8N02X&ipAddress=127.0.0.1').subscribe(res => {
-    //   console.log(res);
-    // });
-    // return this.httpClient.get(url).pipe(first());
-    return of([
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [-73.585071, 45.4696563]
+    this.httpClient.get(url).subscribe((peers: string[]) => {
+      peers.forEach(peer => {
+        if (peer.includes('localhost')) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position);
+            const location = [+position.coords.longitude, +position.coords.latitude];
+            const geoJson = this.fromatGeoJSON(peer, location);
+            setTimeout(() => {
+              this.mapDataStream.next(geoJson);
+            }, 2000);
+          }, err => console.log('MEGA ERRROR '), {timeout: 10000});
+        } else {
+          const query = 'domain=' + 'awesome-blockchain-node.herokuapp.com'; // TODO: change for real domain
+          this.httpClient.get(environment.locationApiBaseUrl + query).pipe(
+            first(),
+          ).subscribe((res: ILocationApiResponse) => {
+            try {
+              const location = [+res.location.lng, +res.location.lat];
+              const geoJson = this.fromatGeoJSON(peer, location);
+              this.mapDataStream.next(geoJson);
+            } catch (err) {
+              console.log('ERRORRR');
+            }
+          });
         }
-      }
-    ]);
+      });
+    });
   }
 
   private initWS() {
     this.myWebSocket = webSocket(environment.wsAddress);
     this.myWebSocket$ = this.myWebSocket.asObservable();
+  }
+
+  private fromatGeoJSON(peer: string, location: number[]): IGeoJson {
+    return {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: location
+      },
+      properties: {
+        url: peer
+      }
+    };
   }
 
 
