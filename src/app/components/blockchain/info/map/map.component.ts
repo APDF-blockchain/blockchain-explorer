@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import { customMapLayers } from 'src/assets/customMapLayers';
 import { BlockchainService } from 'src/app/services/blockchain.service';
 import { Subscription } from 'rxjs';
-import { IGeoJson } from 'src/app/model/geoJSON';
+import { IGeoJson } from 'src/app/model/geoJson';
 
 @Component({
   selector: 'app-map',

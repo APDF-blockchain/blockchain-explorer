@@ -8,7 +8,7 @@ import { ILocationApiResponse } from '../model/locationApiResponse';
 import { INodeInfo } from '../model/nodeInfo';
 import * as psl from 'psl';
 import { extractHostname } from '../utils/extractHostname';
-import { IGeoJson } from '../model/geoJSON';
+import { IGeoJson } from '../model/geoJson';
 
 @Injectable({
   providedIn: 'root'
