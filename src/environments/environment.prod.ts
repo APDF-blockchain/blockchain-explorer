@@ -4,9 +4,11 @@
 
 const baseUrl = 'https://awesome-blockchain-node.herokuapp.com';
 const wsAddress = 'ws://awesome-blockchain-node.herokuapp.com:6001';
+// const baseUrl = 'http://localhost:3001';
+// const wsAddress = 'ws://localhost:6001';
 
 export const environment = {
-  production: true,
+  production: false,
   baseUrl,
   wsAddress,
   endPoints: {

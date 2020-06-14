@@ -5,11 +5,10 @@ import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { first, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ILocationApiResponse } from '../model/locationApiResponse';
-import { IGeoJson } from '../model/geoJSON';
 import { INodeInfo } from '../model/nodeInfo';
 import * as psl from 'psl';
 import { extractHostname } from '../utils/extractHostname';
-// var dns = require('dns');
+import { IGeoJson } from '../model/geoJSON';
 
 @Injectable({
   providedIn: 'root'

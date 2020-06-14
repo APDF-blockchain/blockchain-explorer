@@ -2,10 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import { customMapLayers } from 'src/assets/customMapLayers';
 import { BlockchainService } from 'src/app/services/blockchain.service';
-// import { features } from 'process';
-import { IGeoJson } from 'src/app/model/geoJSON';
 import { Subscription } from 'rxjs';
-import { features } from 'process';
+import { IGeoJson } from 'src/app/model/geoJSON';
 
 @Component({
   selector: 'app-map',
