@@ -32,7 +32,6 @@ export class BlockchainService {
       first(),
       map((info: INodeInfo) => {
         const domain = psl.get(extractHostname(info.nodeUrl));
-        console.log(domain);
         const query = 'domain=' + domain; // TODO: change for real domain
         this.httpClient.get(environment.locationApiBaseUrl + query).pipe(
             first(),
@@ -88,7 +87,6 @@ export class BlockchainService {
       peers.forEach(peer => {
         if (peer.includes('localhost')) {
           navigator.geolocation.getCurrentPosition((position) => {
-            console.log(position);
             const location = [+position.coords.longitude, +position.coords.latitude];
             const geoJson = this.fromatGeoJSON(peer, location);
             setTimeout(() => {

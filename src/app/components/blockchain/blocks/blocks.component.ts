@@ -27,12 +27,10 @@ export class BlocksComponent {
   private listenToBlockchain(): void {
     const subscription1 = this.blockchainService.getBlocks().subscribe(blocks => {
       this.blocks = blocks.reverse();
-      console.log(this.blocks);
       this.dataSource = new MatTableDataSource(this.blocks);
       this.dataSource.paginator = this.paginator;
     });
     const subscription2 = this.blockchainService.myWebSocket$.subscribe(stream => {
-      console.log(stream);
       if (stream.type === 2 && stream.data) {
         const newBlock = JSON.parse(stream.data)[0];
         this.blocks.unshift(newBlock);

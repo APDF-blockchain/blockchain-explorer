@@ -26,10 +26,7 @@ export class WalletComponent implements OnInit {
     this.subscription.add(subscription2);
   }
 
-  public ngOnInit(): void {
-    // this.isLoggedIn = this.walletService.isLoggedIn();
-    // console.log(this.isLoggedIn);
-  }
+  public ngOnInit(): void { }
 
   public onNavigate($event: any): void {
     void this.router.navigate(['./', 'wallet', this.navLinks[$event.index]]);

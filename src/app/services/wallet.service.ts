@@ -88,7 +88,6 @@ export class WalletService {
       const hdNode = bip32.fromSeed(seed);
       const accounts = this.derive5accountsFromHDNode(hdNode);
       await this.addBalanceToAccounts(accounts);
-      console.log(accounts);
       return { mnemonic, accounts };
     } catch (err) {
       throw new Error(err);

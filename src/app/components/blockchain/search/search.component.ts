@@ -34,7 +34,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   public onSearch(): void {
     if (this.searchForm.valid) {
       const hash = this.searchForm.value.hash;
-      console.log(hash);
       this.searchFromHash(hash);
     }
   }

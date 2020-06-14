@@ -28,7 +28,6 @@ export class TransactionsComponent {
   private loadConfirmedTx(): void {
     const subscription1 = this.blockchainService.getConfirmedTx().subscribe(txs => {
       this.confirmedTx = txs.reverse();
-      console.log(this.confirmedTx);
       this.dataSource = new MatTableDataSource(this.confirmedTx);
       this.dataSource.paginator = this.paginator;
     });

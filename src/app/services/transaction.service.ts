@@ -23,7 +23,6 @@ export class TransactionService {
                          message: string): Observable<any> {
     const transaction = this.createTransaction(senderAddress, recipientAddress, value, message);
     const url = environment.endPoints.postTx;
-    console.log(url);
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -55,7 +54,6 @@ export class TransactionService {
     sig.sVal = signature.s.toString('hex');
     sigArr.push(sig.rVal, sig.sVal);
     tx.senderSignature = sigArr;
-    console.log(tx);
     return tx;
   }
 

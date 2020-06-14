@@ -57,7 +57,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
 
       const subscription = this.blockchainService.mapDataStream$.subscribe(peerGeoJson => {
-        console.log(peerGeoJson);
         const alreadyAdded = this.peersFeatures.some(feature => feature.properties.url ===  peerGeoJson.properties.url);
         if (peerGeoJson && !alreadyAdded) {
           this.peersFeatures.push(peerGeoJson);
