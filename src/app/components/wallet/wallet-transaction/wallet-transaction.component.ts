@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment';
 })
 export class WalletTransactionComponent implements OnInit, OnDestroy {
   public transactionForm: FormGroup;
-  // public message: string;
   private subscription = new Subscription();
   public hdWallet: IHDWallet;
   public txDataHash: string;

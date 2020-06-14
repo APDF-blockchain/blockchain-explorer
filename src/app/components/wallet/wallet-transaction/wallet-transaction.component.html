@@ -5,7 +5,7 @@
     <div class="form-fields">
         <mat-form-field>
             <mat-select matInput placeholder="Sender" formControlName="sender">
-                <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account">{{ account.address }}</mat-option>
+                <mat-option *ngFor="let account of hdWallet?.accounts" [value]="account">{{ account.address }} <b>({{ account.confirmedBalance }})</b></mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>

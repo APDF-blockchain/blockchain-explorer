@@ -6,7 +6,6 @@ import { WalletTransactionComponent } from './wallet-transaction/wallet-transact
 import { WalletRoutingModule } from './wallet-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { WalletLogoutComponent } from './wallet-logout/wallet-logout.component';
-import { WalletBalanceComponent } from './wallet-balance/wallet-balance.component';
 import { WalletOpenComponent } from './wallet-open/wallet-open.component';
 import { WalletLoginComponent } from './wallet-login/wallet-login.component';
 
@@ -16,7 +15,6 @@ import { WalletLoginComponent } from './wallet-login/wallet-login.component';
     WalletCreationComponent,
     WalletTransactionComponent,
     WalletLogoutComponent,
-    WalletBalanceComponent,
     WalletOpenComponent,
     WalletLoginComponent
   ],
