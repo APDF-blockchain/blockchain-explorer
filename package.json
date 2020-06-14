@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node patch.js && ng build"
+    "postinstall": "node patch.js && ng build --configuration=production"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +34,9 @@
     "jasmine": "^3.5.0",
     "jest": "^26.0.1",
     "js-sha256": "^0.9.0",
+    "mapbox-gl": "^1.10.2",
     "path": "^0.12.7",
+    "psl": "^1.8.0",
     "rxjs": "~6.5.4",
     "stream": "0.0.2",
     "tslib": "^1.10.0",

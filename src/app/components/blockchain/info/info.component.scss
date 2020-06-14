@@ -4,11 +4,16 @@
     display: flex;
     flex-wrap: wrap;
     div {
-        padding: 15px;
+        padding: 10px;
     }
     p {
         margin: 0 0 5px;
     }
+}
+
+#flex-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 .custom-underline {
@@ -16,4 +21,20 @@
     height: 1px;
     display: block;
     background: $light-grey;
+}
+
+.flex-container-item {
+    width: 49%;
+    position: relative;
+    min-height: 100%;
+}
+
+@media screen and (max-width: 1075px) {
+    #flex-container {
+        flex-direction: column
+    };
+    .flex-container-item {
+        width: 100%;
+        min-height: 300px;
+    }
 }

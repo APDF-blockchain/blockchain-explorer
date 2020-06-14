@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FaucetComponent  implements OnInit, OnDestroy {
   public fundRequestForm: FormGroup;
+  public txDataHash: string;
   private subscription = new Subscription();
 
   constructor(
@@ -35,7 +36,10 @@ export class FaucetComponent  implements OnInit, OnDestroy {
     const value = environment.faucet.faucetTxValue;
     const message = 'Fund request';
     this.transactionService.sendTransaction(sender, recipient, value, message).subscribe(
-      res => this.notificationService.sendSuccess('Fund successfully sent to this address: ' + recipient),
+      res => {
+        this.notificationService.sendSuccess('Fund successfully sent!');
+        this.txDataHash = res.transactionDataHash;
+      },
       err => this.notificationService.sendError(err.error.error)
     );
   }

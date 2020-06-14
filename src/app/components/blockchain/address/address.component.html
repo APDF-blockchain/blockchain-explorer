@@ -1,15 +1,16 @@
-<h2>{{ address }}</h2>
-<ul *ngIf="balance$ | async; let balance;">
-    <b>Balance:</b>
-    <li>Safe balance: {{ balance.safeBalance }}</li>
-    <li>Confirmed balance: {{ balance.confirmedBalance }}</li>
-    <li>Pending balance: {{ balance.pendingBalance }}</li>
-</ul>
-<ul>
-    <b>Transactions:</b>
-    <li *ngFor="let tx of txs$ | async">
-        <a [routerLink]="['/', 'transactions', tx.transactionDataHash]">
-            {{ tx.transactionDataHash }}
-        </a>
-    </li>
-</ul>
+<mat-list role="list" *ngIf="balance$ | async; let balance;">
+    <mat-list-item role="listitem"><b>Address </b>: &nbsp; <a [routerLink]="['/', 'address', address]">{{ address }}</a></mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item role="listitem"><b>Safe balance </b>: {{ balance.safeBalance }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item role="listitem"><b>Confirmed balance </b>: {{ balance.confirmedBalance }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item role="listitem"><b>Pending balance </b>: {{ balance.pendingBalance }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item role="listitem">
+        <div>
+            <b>Transactions:</b>
+            <a *ngFor="let tx of txs$ | async" mat-line [routerLink]="['/', 'transactions', tx.transactionDataHash]">{{tx.transactionDataHash}}</a>
+        </div>
+    </mat-list-item>
+</mat-list>

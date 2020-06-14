@@ -1,0 +1,7 @@
+<mat-list role="list" id="flex-list-items">
+    <mat-list-item role="listitem" *ngFor="let account of hdWallet?.accounts">
+        <a [routerLink]="['/', 'address', account.address]">{{ account.address }}</a>
+        {{ account.confirmedBalance }}
+        <mat-divider></mat-divider>
+    </mat-list-item>
+</mat-list>

@@ -7,6 +7,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 import { IHDWallet, IAccount } from '../model/wallet';
 import { NotificationService } from './notification.service';
+import { BlockchainService } from './blockchain.service';
+import { first } from 'rxjs/operators';
 
 (window as any).global = window;
 
@@ -19,7 +21,7 @@ export class WalletService {
   private isMnemonicInStorage: BehaviorSubject<boolean>;
   public isMnemonicInStorage$: Observable<boolean>;
 
-  constructor(private notificationService: NotificationService) {
+  constructor(private notificationService: NotificationService, private blockchainService: BlockchainService) {
     this.hdWallet = new BehaviorSubject(null);
     this.hdWallet$ = this.hdWallet.asObservable();
     const isMnemonicInStorage = !!localStorage.getItem('encryptedMnemonic');
@@ -31,7 +33,7 @@ export class WalletService {
     try {
       const mnemonic = bip39.generateMnemonic();
       this.storeMnemonic(password, mnemonic);
-      const hdWallet = this.loadHDWallet(password, mnemonic);
+      const hdWallet = await this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       this.notificationService.sendSuccess(`New wallet successfully created,
       don't forget to save your mnemonic on a safe place!`);
@@ -41,10 +43,10 @@ export class WalletService {
     }
   }
 
-  public loginCurrentWallet(password: string): void {
+  public async loginCurrentWallet(password: string): Promise<void> {
     try {
       const mnemonic = this.getStoredMnemonic(password);
-      const hdWallet = this.loadHDWallet(password, mnemonic);
+      const hdWallet = await this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       this.notificationService.sendSuccess(`Successfully logged in!`);
     } catch (err) {
@@ -52,10 +54,10 @@ export class WalletService {
     }
   }
 
-  public restoreWallet(password: string, mnemonic: string): void {
+  public async restoreWallet(password: string, mnemonic: string): Promise<void> {
     try {
       this.storeMnemonic(password, mnemonic);
-      const hdWallet = this.loadHDWallet(password, mnemonic);
+      const hdWallet = await this.loadHDWallet(password, mnemonic);
       this.hdWallet.next(hdWallet);
       this.notificationService.sendSuccess(`We were able to restore a wallet from the info you provided!`);
     } catch (err) {
@@ -74,17 +76,23 @@ export class WalletService {
     return decryptedMnemonic;
   }
 
-  public loadHDWallet(password: string, mnemonic: string): IHDWallet {
-    const isMnemonicValid = bip39.validateMnemonic(mnemonic);
-    if (!isMnemonicValid) {
-      throw new Error('Mnemonic is not valid');
+  public async loadHDWallet(password: string, mnemonic: string): Promise<IHDWallet> {
+    try {
+      const isMnemonicValid = bip39.validateMnemonic(mnemonic);
+      if (!isMnemonicValid) {
+        throw new Error('Mnemonic is not valid');
+      }
+
+      const seed = bip39.mnemonicToSeedSync(mnemonic, password);
+
+      const hdNode = bip32.fromSeed(seed);
+      const accounts = this.derive5accountsFromHDNode(hdNode);
+      await this.addBalanceToAccounts(accounts);
+      console.log(accounts);
+      return { mnemonic, accounts };
+    } catch (err) {
+      throw new Error(err);
     }
-
-    const seed = bip39.mnemonicToSeedSync(mnemonic, password);
-
-    const hdNode = bip32.fromSeed(seed);
-    const accounts = this.derive5accountsFromHDNode(hdNode);
-    return { mnemonic, accounts };
   }
 
   private derive5accountsFromHDNode(hdNode: bip32.BIP32Interface): IAccount[] {
@@ -104,6 +112,17 @@ export class WalletService {
     const encryptedMnemonic = CryptoJS.AES.encrypt(mnemonic, password).toString();
     localStorage.setItem('encryptedMnemonic', encryptedMnemonic);
     this.isMnemonicInStorage.next(true);
+  }
+
+  private async addBalanceToAccounts(accounts: IAccount[]): Promise<void> {
+    try {
+      accounts.forEach(async account => {
+        const balances = await this.blockchainService.getAddressBalance(account.address).toPromise();
+        account.confirmedBalance = balances.confirmedBalance;
+      });
+    } catch (err) {
+      throw new Error('Something went wrong while retreiving balances');
+    }
   }
 
 }

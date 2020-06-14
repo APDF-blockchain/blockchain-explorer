@@ -9,6 +9,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Signature } from '../model/signature';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
+import { WalletService } from './wallet.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ import { first } from 'rxjs/operators';
 export class TransactionService {
   public EC = new ec('secp256k1');
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private walletService: WalletService) { }
 
   public sendTransaction(senderAddress: IAccount, recipientAddress: string, value: number,
                          message: string): Observable<any> {
@@ -47,7 +48,7 @@ export class TransactionService {
     tx.dateCreated = today;
     tx.senderPubKey = senderAddress.publicKey;
     const sigKey = this.EC.keyFromPrivate(senderAddress.privateKey);
-    const transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.senderPubKey));
+    const transactionHash = sha256(JSON.stringify(tx.from + tx.to + tx.value + tx.fee + tx.data + tx.dateCreated + tx.senderPubKey));
     tx.transactionDataHash = transactionHash;
     const signature = sigKey.sign(transactionHash);
     sig.rVal = signature.r.toString('hex');

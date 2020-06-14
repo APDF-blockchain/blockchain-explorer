@@ -1,16 +1,21 @@
-<mat-card>
-    <form 
-    [formGroup]="fundRequestForm" 
-    (ngSubmit)="onSubmitfundRequestForm()"
-    (keydown.enter)="$event.preventDefault()">
-        <div class="form-fields">
-            <mat-form-field>
-                <input matInput type="text" placeholder="Recipient" formControlName="recipient">
-            </mat-form-field>  
-        </div>
-
-        <div class="form-btns">
-            <button mat-raised-button color="primary" >Request</button>
-        </div>
-    </form>
-</mat-card>
+<div class="card-container">
+    <h2>Request 1000 awesome coins!</h2>
+    <mat-card>
+        <form 
+        [formGroup]="fundRequestForm" 
+        (ngSubmit)="onSubmitfundRequestForm()"
+        (keydown.enter)="$event.preventDefault()">
+            <div class="form-fields">
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Address you'd like to fund" formControlName="recipient">
+                </mat-form-field>  
+            </div>
+    
+            <div class="form-btns">
+                <button mat-raised-button color="primary">Request !</button>
+            </div>
+        </form>
+        <br>
+        <a *ngIf="txDataHash" target="_blank" [routerLink]="['/', 'transactions', txDataHash]">See transaction {{ txDataHash }}</a>
+    </mat-card>
+</div>
