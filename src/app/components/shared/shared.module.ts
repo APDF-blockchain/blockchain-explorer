@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule
   ],
   exports: [
     FormsModule,
@@ -62,7 +64,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule
   ],
   providers: [FormGroupDirective]
 })

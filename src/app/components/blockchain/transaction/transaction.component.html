@@ -1,13 +1,14 @@
-<ul>
-    <li *ngFor="let item of tx | keyvalue">
+<mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let item of tx | keyvalue">
         <div *ngIf="item.key !== 'minedInBlockIndex' && item.key !== 'from' && item.key !== 'to'">
-            <b>{{item.key}}</b>: <b>{{item.value}}</b>
+            <b>{{ item.key | titlecase }}</b>: {{item.value}}
         </div>
-        <div *ngIf  ="item.key === 'minedInBlockIndex'">
-            <b>{{item.key}}</b>: <a [routerLink]="['/', 'blocks', tx.minedInBlockIndex]">{{ item.value }}</a>
+        <div *ngIf="item.key === 'minedInBlockIndex'">
+            <b>{{ item.key | titlecase }}</b>: <a [routerLink]="['/', 'blocks', tx.minedInBlockIndex]">{{ item.value }}</a>
         </div>
         <div *ngIf="item.key === 'from' || item.key === 'to'">
-            <b>{{item.key}}</b>: <a [routerLink]="['/', 'address', item.value]">{{ item.value }}</a>
+            <b>{{ item.key | titlecase }}</b>: <a [routerLink]="['/', 'address', item.value]">{{ item.value }}</a>
         </div>
-    </li>
-</ul>
+        <mat-divider></mat-divider>
+    </mat-list-item>
+</mat-list>

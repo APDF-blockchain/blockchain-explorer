@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ILocationApiResponse } from '../model/locationApiResponse';
 import { IGeoJson } from '../model/geoJSON';
+import { INodeInfo } from '../model/nodeInfo';
+import * as psl from 'psl';
+import { extractHostname } from '../utils/extractHostname';
 // var dns = require('dns');
 
 @Injectable({
@@ -25,7 +28,26 @@ export class BlockchainService {
   }
 
   public getInfo(): Observable<any> {
-    return this.httpClient.get(environment.endPoints.getInfo).pipe(first());
+    return this.httpClient.get(environment.endPoints.getInfo).pipe(
+      first(),
+      map((info: INodeInfo) => {
+        const domain = psl.get(extractHostname(info.nodeUrl));
+        console.log(domain);
+        const query = 'domain=' + domain; // TODO: change for real domain
+        this.httpClient.get(environment.locationApiBaseUrl + query).pipe(
+            first(),
+          ).subscribe((res: ILocationApiResponse) => {
+            try {
+              const location = [+res.location.lng, +res.location.lat];
+              const geoJson = this.fromatGeoJSON(info.nodeUrl, location);
+              this.mapDataStream.next(geoJson);
+            } catch (err) {
+              console.log('ERRORRR');
+            }
+        });
+        return info;
+      })
+    );
   }
 
   public getBlock(index: number): Observable<any> {
@@ -71,8 +93,8 @@ export class BlockchainService {
             const geoJson = this.fromatGeoJSON(peer, location);
             setTimeout(() => {
               this.mapDataStream.next(geoJson);
-            }, 2000);
-          }, err => console.log('MEGA ERRROR '), {timeout: 10000});
+            }, 1000);
+          }, err => console.log('MEGA ERRROR '), { timeout: 10000 });
         } else {
           const query = 'domain=' + 'awesome-blockchain-node.herokuapp.com'; // TODO: change for real domain
           this.httpClient.get(environment.locationApiBaseUrl + query).pipe(
@@ -88,7 +110,9 @@ export class BlockchainService {
           });
         }
       });
-    });
+    },
+    err => console.log(err)
+    );
   }
 
   private initWS() {

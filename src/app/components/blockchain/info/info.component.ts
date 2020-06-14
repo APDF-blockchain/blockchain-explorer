@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { BlockchainService } from 'src/app/services/blockchain.service';
 import { Subscription } from 'rxjs';
 
@@ -7,12 +7,16 @@ import { Subscription } from 'rxjs';
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss']
 })
-export class InfoComponent {
+export class InfoComponent implements OnDestroy {
   public info: any;
   private subscription: Subscription = new Subscription();
 
-  constructor(private blockchainService: BlockchainService) { 
+  constructor(private blockchainService: BlockchainService) {
     this.loadInfo();
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private loadInfo(): void {

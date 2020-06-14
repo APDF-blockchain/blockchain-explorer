@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -8,9 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { 
-    console.log(environment.baseUrl);
-  }
+  constructor() { }
 
   ngOnInit(): void {
   }

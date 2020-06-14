@@ -5,6 +5,7 @@ import { BlockchainService } from 'src/app/services/blockchain.service';
 // import { features } from 'process';
 import { IGeoJson } from 'src/app/model/geoJSON';
 import { Subscription } from 'rxjs';
+import { features } from 'process';
 
 @Component({
   selector: 'app-map',
@@ -57,7 +58,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
       const subscription = this.blockchainService.mapDataStream$.subscribe(peerGeoJson => {
         console.log(peerGeoJson);
-        if (peerGeoJson) {
+        const alreadyAdded = this.peersFeatures.some(feature => feature.properties.url ===  peerGeoJson.properties.url);
+        if (peerGeoJson && !alreadyAdded) {
           this.peersFeatures.push(peerGeoJson);
           this.map.getSource('earthquakes').setData({type: 'FeatureCollection', features: this.peersFeatures});
         }

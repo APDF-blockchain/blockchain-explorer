@@ -2,4 +2,5 @@
 
 #main-container {
     min-height: calc(100vh - #{$navbarHeight} - #{$footerHeight});
+    position: relative;
 }
