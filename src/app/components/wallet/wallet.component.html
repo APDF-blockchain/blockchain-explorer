@@ -10,6 +10,9 @@
             <mat-tab *ngIf="isMnemonicInStorage" label="Login current wallet">
                 <app-wallet-login></app-wallet-login>
             </mat-tab>
+            <mat-tab *ngIf="isHdWalletLoaded" label="Accounts">
+                <app-wallet-accounts></app-wallet-accounts>
+            </mat-tab>
             <mat-tab *ngIf="isHdWalletLoaded" label="Send transaction">
                 <app-wallet-transaction></app-wallet-transaction>
             </mat-tab>

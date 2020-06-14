@@ -25,6 +25,14 @@ tr.mat-header-row:nth-child(2) {
     height: 40px !important;
 }
 
+.mat-tab-body-wrapper {
+    padding: 20px;
+}
+
+#flex-list-items .mat-list-item-content {
+    justify-content: space-between;
+}
+
 .notification-error, .notification-success {
     color: #fff;
 }

@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { WalletLogoutComponent } from './wallet-logout/wallet-logout.component';
 import { WalletOpenComponent } from './wallet-open/wallet-open.component';
 import { WalletLoginComponent } from './wallet-login/wallet-login.component';
+import { WalletAccountsComponent } from './wallet-accounts/wallet-accounts.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { WalletLoginComponent } from './wallet-login/wallet-login.component';
     WalletTransactionComponent,
     WalletLogoutComponent,
     WalletOpenComponent,
-    WalletLoginComponent
+    WalletLoginComponent,
+    WalletAccountsComponent
   ],
   imports: [
     CommonModule,

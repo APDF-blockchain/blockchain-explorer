@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WalletService } from 'src/app/services/wallet.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UnspentTxOut } from 'src/app/model/unspent-tx-out';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { IHDWallet } from 'src/app/model/wallet';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TransactionService } from 'src/app/services/transaction.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-wallet-transaction',

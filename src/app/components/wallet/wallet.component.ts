@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./wallet.component.scss']
 })
 export class WalletComponent implements OnInit {
-  public navLinks = ['create', 'open', 'login', 'transaction', 'logout'];
+  public navLinks = ['create', 'open', 'login', 'accounts', 'transaction', 'logout'];
   public activeLinkIndex = 1;
   public isHdWalletLoaded = false;
   public isMnemonicInStorage = false;

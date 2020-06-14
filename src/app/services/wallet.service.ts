@@ -8,6 +8,7 @@ import * as CryptoJS from 'crypto-js';
 import { IHDWallet, IAccount } from '../model/wallet';
 import { NotificationService } from './notification.service';
 import { BlockchainService } from './blockchain.service';
+import { first } from 'rxjs/operators';
 
 (window as any).global = window;
 
