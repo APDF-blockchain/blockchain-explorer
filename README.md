@@ -27,6 +27,6 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 # blockchain-explorer
 
-# interesting urls for futur references
+# interesting urls for future references
 https://github.com/indutny/elliptic
 https://github.com/conradoqg/naivecoin/blob/master/lib/
